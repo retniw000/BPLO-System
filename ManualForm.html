@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+   <link rel="stylesheet" href="ManualForm.css">
+   <style>
+      /* Disabled field group — greyed out, not interactive */
+      .field-group-disabled {
+         opacity: 0.42;
+         pointer-events: none;
+         user-select: none;
+      }
+      .field-group-disabled input,
+      .field-group-disabled .pill-label {
+         cursor: not-allowed;
+      }
+   </style>
+   <title>Unified Business Permit Application Form</title>
+</head>
+<body>
+
+   <!-- ================================================================
+        NAVIGATION
+        ================================================================ -->
+   <nav>
+      <div class="nav-inner">
+         <div class="nav-left">
+            <img src="City_of_Taguig_seal.svg.png" alt="Taguig Seal" class="logo">
+            <div class="header-text">
+               <span class="gov-label">Republic of the Philippines</span>
+               <span class="city-label">City of Taguig</span>
+               <span class="office-label">Business Permits &amp; Licensing Office</span>
+            </div>
+         </div>
+         <div class="nav-right">
+            <a href="index.html">
+               <button class="dashboard-btn">
+                  <i class="fa-solid fa-chart-column"></i> CRUD System
+               </button>
+            </a>
+         </div>
+      </div>
+   </nav>
+
+
+   <!-- ================================================================
+        MAIN
+        ================================================================ -->
+   <main>
+
+      <div class="page-header">
+         <div class="page-header-badge"><i class="fa-solid fa-file-contract"></i></div>
+         <div>
+            <h1 class="form-title">Unified Business Permit Application Form</h1>
+            <p class="form-subtitle">City of Taguig — Business Permits and Licensing Office (BPLO)</p>
+            <p style="font-size:.78rem; color:#888; margin-top:4px;">
+               <i>DISCLAIMER: Not an official government website. Created for academic purposes only.</i>
+            </p>
+         </div>
+      </div>
+
+      <section class="form-container">
+         <form id="appForm" autocomplete="off">
+
+
+            <!-- ============================================================
+                 SECTION 1 — APPLICATION TYPE & PAYMENT
+                 ============================================================ -->
+            <div class="form-section">
+               <div class="section-header">
+                  <span class="section-icon"><i class="fa-solid fa-list-check"></i></span>
+                  <div>
+                     <h2 class="section-title">Application Type &amp; Payment</h2>
+                     <p class="section-desc">Select the type of application and your preferred payment arrangement.</p>
+                     <p style="color:var(--red); font-size:.75rem; margin-top:4px;">
+                        <i>Fields marked <strong>*</strong> are required.</i>
+                     </p>
+                  </div>
+               </div>
+               <div class="section-body">
+                  <div class="form-row three-col">
+
+                     <!-- Application Type -->
+                     <div class="col">
+                        <p class="field-label"><span class="req">*</span> Application Type</p>
+                        <div class="pill-group column">
+                           <label class="pill-label radio"><input type="radio" name="apptype" value="New"><span>New</span></label>
+                           <label class="pill-label radio"><input type="radio" name="apptype" value="Renewal"><span>Renewal</span></label>
+                           <label class="pill-label radio"><input type="radio" name="apptype" value="Transfer"><span>Transfer</span></label>
+                           <label class="pill-label radio"><input type="radio" name="apptype" value="Amendment"><span>Amendment</span></label>
+                        </div>
+                     </div>
+
+                     <!-- Payment columns -->
+                     <div class="col">
+                        <p class="field-label"><span class="req">*</span> Mode of Payment</p>
+                        <div class="pill-group column">
+                           <label class="pill-label radio"><input type="radio" name="modeOfPayment" value="Annual"><span>Annual</span></label>
+                           <label class="pill-label radio"><input type="radio" name="modeOfPayment" value="Bi-Annual"><span>Bi-Annual</span></label>
+                           <label class="pill-label radio"><input type="radio" name="modeOfPayment" value="Quarterly"><span>Quarterly</span></label>
+                        </div>
+
+                        <p class="field-label top-gap"><span class="req">*</span> Delivery Option</p>
+                        <div class="pill-group column">
+                           <label class="pill-label radio"><input type="radio" name="deliveryOption" value="Pick-Up"><span>Pick-Up</span></label>
+                           <label class="pill-label radio"><input type="radio" name="deliveryOption" value="Courier"><span>Courier</span></label>
+                        </div>
+
+                        <p class="field-label top-gap"><span class="req">*</span> Payment Option</p>
+                        <div class="pill-group column">
+                           <label class="pill-label radio"><input type="radio" name="paymentOption" value="Cash/Check"><span><i class="fa-solid fa-money-bill"></i> Cash / Check</span></label>
+                           <label class="pill-label radio"><input type="radio" name="paymentOption" value="Card"><span><i class="fa-solid fa-credit-card"></i> Card</span></label>
+                           <label class="pill-label radio"><input type="radio" name="paymentOption" value="eWallet"><span><i class="fa-solid fa-wallet"></i> eWallet</span></label>
+                        </div>
+                     </div>
+
+                     <div class="col"></div>
+                  </div>
+               </div>
+            </div>
+
+
+            <!-- ============================================================
+                 SECTION 2 — BUSINESS INFORMATION & REGISTRATION
+                 ============================================================ -->
+            <div class="form-section">
+               <div class="section-header">
+                  <span class="section-icon"><i class="fa-solid fa-building"></i></span>
+                  <div>
+                     <h2 class="section-title">Business Information &amp; Registration</h2>
+                     <p class="section-desc">Provide your business registration and address details.</p>
+                  </div>
+               </div>
+               <div class="section-body">
+
+                  <!-- LCN -->
+                  <div class="input-group" style="max-width:260px">
+                     <label for="lcn"><span class="req">*</span> LCN (License Control Number)</label>
+                     <input type="text" id="lcn" name="lcn" placeholder="Local Control Number">
+                  </div>
+
+                  <!-- Business Structure -->
+                  <p class="field-label top-gap"><span class="req">*</span> Business Structure</p>
+                  <div class="pill-group wrap">
+                     <label class="pill-label radio"><input type="radio" name="businessType" value="Sole Proprietorship"><span>Sole Proprietorship</span></label>
+                     <label class="pill-label radio"><input type="radio" name="businessType" value="One Person Corporation"><span>One Person Corporation</span></label>
+                     <label class="pill-label radio"><input type="radio" name="businessType" value="Partnership"><span>Partnership</span></label>
+                     <label class="pill-label radio"><input type="radio" name="businessType" value="Cooperative"><span>Cooperative</span></label>
+                     <label class="pill-label radio"><input type="radio" name="businessType" value="Corporation"><span>Corporation</span></label>
+                  </div>
+
+                  <!-- Owner Sex -->
+                  <div class="form-row two-col top-gap">
+                     <div class="col" id="ownerSexGroup">
+                        <p class="field-label"><span class="req">*</span> Owner Sex</p>
+                        <div class="pill-group row">
+                           <label class="pill-label radio"><input type="radio" name="ownerSex" value="Male" disabled><span>Male</span></label>
+                           <label class="pill-label radio"><input type="radio" name="ownerSex" value="Female" disabled><span>Female</span></label>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="divider"></div>
+
+                  <!-- TIN -->
+                  <div class="form-row two-col">
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="tin"><span class="req">*</span> Tax Identification Number (TIN)</label>
+                           <input type="text" id="tin" name="tin" class="strict-number"
+                              inputmode="numeric" minlength="9" maxlength="12" placeholder="000000000000">
+                        </div>
+                     </div>
+                     <div class="col" id="corporateNameGroup">
+                        <div class="input-group">
+                           <label for="corporateName">Corporate / Business Name <span class="optional-tag">If applicable</span></label>
+                           <input type="text" id="corporateName" name="corporateName" placeholder="Registered corporate or business name" disabled>
+                        </div>
+                     </div>
+                  </div>
+
+                  <!-- Taxpayer Name -->
+                  <div id="taxpayerNameGroup" class="form-row four-col">
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="taxpayerSurname"><span class="req">*</span> Taxpayer Surname</label>
+                           <input type="text" id="taxpayerSurname" name="taxpayerSurname" placeholder="Surname" disabled>
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="taxpayerFirstName"><span class="req">*</span> First Name</label>
+                           <input type="text" id="taxpayerFirstName" name="taxpayerFirstName" placeholder="First name" disabled>
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="taxpayerMiddleName">Middle Name</label>
+                           <input type="text" id="taxpayerMiddleName" name="taxpayerMiddleName" placeholder="Middle name" disabled>
+                        </div>
+                     </div>
+                     <div class="col-xs">
+                        <div class="input-group">
+                           <label for="taxpayerSuffix">Suffix</label>
+                           <input type="text" id="taxpayerSuffix" name="taxpayerSuffix" placeholder="Jr." disabled>
+                        </div>
+                     </div>
+                  </div>
+
+                  <!-- Trade Name -->
+                  <div class="input-group">
+                     <label for="tradeName">Trade Name / Franchise <span class="optional-tag">If applicable</span></label>
+                     <input type="text" id="tradeName" name="tradeName" placeholder="Trade or franchise name">
+                  </div>
+
+                  <div class="divider"></div>
+
+                  <!-- Office Address -->
+                  <p class="field-label"><span class="req">*</span> Office Address</p>
+                  <div class="form-row three-col">
+                     <div class="col-xs">
+                        <div class="input-group">
+                           <label for="unitNo">Unit No.</label>
+                           <input type="text" id="unitNo" name="unitNo" placeholder="Unit">
+                        </div>
+                     </div>
+                     <div class="col-xs">
+                        <div class="input-group">
+                           <label for="houseFloorNo">Floor No.</label>
+                           <input type="text" id="houseFloorNo" name="houseFloorNo" placeholder="Floor">
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="buildingName">Building Name</label>
+                           <input type="text" id="buildingName" name="buildingName" placeholder="Building name">
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form-row four-col">
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="street">Street</label>
+                           <input type="text" id="street" name="street" placeholder="Street">
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="barangay">Barangay</label>
+                           <input type="text" id="barangay" name="barangay" placeholder="Barangay">
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="city">City</label>
+                           <input type="text" id="city" name="city" placeholder="City">
+                        </div>
+                     </div>
+                     <div class="col-xs">
+                        <div class="input-group">
+                           <label for="zipCode">ZIP</label>
+                           <input type="text" id="zipCode" name="zipCode" class="strict-number"
+                              inputmode="numeric" maxlength="4" placeholder="1234">
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="divider"></div>
+
+                  <!-- Demographics & Assets -->
+                  <div class="stats-grid">
+
+                     <!-- Employees in Establishment -->
+                     <div class="stat-card">
+                        <p class="stat-title"><i class="fa-solid fa-users"></i> Employees in Establishment</p>
+                        <div class="form-row">
+                           <div class="col">
+                              <div class="input-group">
+                                 <label for="empEstMale"><span class="req">*</span> Male</label>
+                                 <input type="text" id="empEstMale" name="empEstMale"
+                                    class="strict-number" inputmode="numeric" placeholder="0">
+                              </div>
+                           </div>
+                           <div class="col">
+                              <div class="input-group">
+                                 <label for="empEstFemale"><span class="req">*</span> Female</label>
+                                 <input type="text" id="empEstFemale" name="empEstFemale"
+                                    class="strict-number" inputmode="numeric" placeholder="0">
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <!-- Employees in Taguig -->
+                     <div class="stat-card">
+                        <p class="stat-title"><i class="fa-solid fa-house-user"></i> Employees in Taguig</p>
+                        <div class="form-row">
+                           <div class="col">
+                              <div class="input-group">
+                                 <label for="empTaguigMale"><span class="req">*</span> Male</label>
+                                 <input type="text" id="empTaguigMale" name="empTaguigMale"
+                                    class="strict-number" inputmode="numeric" placeholder="0">
+                              </div>
+                           </div>
+                           <div class="col">
+                              <div class="input-group">
+                                 <label for="empTaguigFemale"><span class="req">*</span> Female</label>
+                                 <input type="text" id="empTaguigFemale" name="empTaguigFemale"
+                                    class="strict-number" inputmode="numeric" placeholder="0">
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <!-- Delivery Vehicles -->
+                     <div class="stat-card">
+                        <p class="stat-title"><i class="fa-solid fa-truck"></i> Delivery Vehicles</p>
+                        <div class="form-row">
+                           <div class="col">
+                              <div class="input-group">
+                                 <label for="truckCount">Truck</label>
+                                 <input type="text" id="truckCount" name="truckCount"
+                                    class="strict-number" inputmode="numeric" placeholder="0">
+                              </div>
+                           </div>
+                           <div class="col">
+                              <div class="input-group">
+                                 <label for="vanCount">Van</label>
+                                 <input type="text" id="vanCount" name="vanCount"
+                                    class="strict-number" inputmode="numeric" placeholder="0">
+                              </div>
+                           </div>
+                           <div class="col">
+                              <div class="input-group">
+                                 <label for="motorcycle">Motorcycle</label>
+                                 <input type="text" id="motorcycle" name="motorcycle"
+                                    class="strict-number" inputmode="numeric" placeholder="0">
+                              </div>
+                           </div>
+                           <div class="col">
+                              <div class="input-group">
+                                 <label for="otherVehicle">Other</label>
+                                 <input type="text" id="otherVehicle" name="otherVehicle"
+                                    class="strict-number" inputmode="numeric" placeholder="0">
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                  </div><!-- /stats-grid -->
+
+               </div>
+            </div>
+
+
+            <!-- ============================================================
+                 SECTION 3 — BUSINESS CONTACTS
+                 ============================================================ -->
+            <div class="form-section">
+               <div class="section-header">
+                  <span class="section-icon"><i class="fa-solid fa-address-card"></i></span>
+                  <div>
+                     <h2 class="section-title">Business Contacts</h2>
+                     <p class="section-desc">Authorized representative and designated safety officer details.</p>
+                  </div>
+               </div>
+               <div class="section-body">
+
+                  <!-- Authorized Representative -->
+                  <p class="field-label"><span class="req">*</span> Authorized Representative</p>
+                  <div class="form-row four-col">
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="repSurname"><span class="req">*</span> Surname</label>
+                           <input type="text" id="repSurname" name="repSurname" placeholder="Surname">
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="repFirstName"><span class="req">*</span> First Name</label>
+                           <input type="text" id="repFirstName" name="repFirstName" placeholder="First name">
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="repMiddleInitial">Middle Initial</label>
+                           <input type="text" id="repMiddleInitial" name="repMiddleInitial"
+                              maxlength="2" placeholder="M.I.">
+                        </div>
+                     </div>
+                     <div class="col-xs">
+                        <div class="input-group">
+                           <label for="repSuffix">Suffix</label>
+                           <input type="text" id="repSuffix" name="repSuffix" placeholder="Jr.">
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form-row four-col">
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="repPosition"><span class="req">*</span> Position / Title</label>
+                           <input type="text" id="repPosition" name="repPosition" placeholder="Position">
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="repTelNumber">Telephone Number</label>
+                           <input type="text" id="repTelNumber" name="repTelNumber"
+                              class="strict-number" inputmode="numeric" placeholder="02-XXXX-XXXX">
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="repMobileNumber">Mobile Number</label>
+                           <input type="text" id="repMobileNumber" name="repMobileNumber"
+                              class="strict-number" inputmode="numeric" maxlength="11" placeholder="09XXXXXXXXX">
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="repEmail"><span class="req">*</span> Email Address</label>
+                           <input type="email" id="repEmail" name="repEmail" placeholder="email@example.com">
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="divider"></div>
+
+                  <!-- Safety Officer -->
+                  <p class="field-label"><span class="req">*</span> Designated Safety Officer</p>
+                  <div class="form-row four-col">
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="safetyOfficerSurname"><span class="req">*</span> Surname</label>
+                           <input type="text" id="safetyOfficerSurname" name="safetyOfficerSurname" placeholder="Surname">
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="safetyOfficerFirstName"><span class="req">*</span> First Name</label>
+                           <input type="text" id="safetyOfficerFirstName" name="safetyOfficerFirstName" placeholder="First name">
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="safetyOfficerMiddleName">Middle Name</label>
+                           <input type="text" id="safetyOfficerMiddleName" name="safetyOfficerMiddleName" placeholder="Middle name">
+                        </div>
+                     </div>
+                     <div class="col-xs">
+                        <div class="input-group">
+                           <label for="safetyOfficerSuffix">Suffix</label>
+                           <input type="text" id="safetyOfficerSuffix" name="safetyOfficerSuffix" placeholder="Jr.">
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form-row three-col">
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="safetyTelNumber">Telephone Number</label>
+                           <input type="text" id="safetyTelNumber" name="safetyTelNumber"
+                              class="strict-number" inputmode="numeric" placeholder="02-XXXX-XXXX">
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="safetyMobileNumber">Mobile Number</label>
+                           <input type="text" id="safetyMobileNumber" name="safetyMobileNumber"
+                              class="strict-number" inputmode="numeric" maxlength="11" placeholder="09XXXXXXXXX">
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="input-group">
+                           <label for="safetyEmail"><span class="req">*</span> Email Address</label>
+                           <input type="email" id="safetyEmail" name="safetyEmail" placeholder="email@example.com">
+                        </div>
+                     </div>
+                  </div>
+
+               </div>
+            </div>
+
+
+            <!-- ============================================================
+                 SECTION 4 — BUSINESS ACTIVITY
+                 ============================================================ -->
+            <div class="form-section">
+               <div class="section-header">
+                  <span class="section-icon"><i class="fa-solid fa-briefcase"></i></span>
+                  <div>
+                     <h2 class="section-title">Business Activity</h2>
+                     <p class="section-desc">Office classification and lines of business.</p>
+                  </div>
+               </div>
+               <div class="section-body">
+
+                  <!-- Office Classification -->
+                  <p class="field-label"><span class="req">*</span> Office Classification</p>
+                  <div class="pill-group wrap">
+                     <label class="pill-label radio"><input type="radio" name="officeClass" value="Main/Principal/Head Office"><span>Main / Principal / Head Office</span></label>
+                     <label class="pill-label radio"><input type="radio" name="officeClass" value="Branch"><span>Branch</span></label>
+                     <label class="pill-label radio"><input type="radio" name="officeClass" value="Administrative Office"><span>Administrative Office</span></label>
+                     <label class="pill-label radio"><input type="radio" name="officeClass" value="Sales Office"><span>Sales Office</span></label>
+                     <label class="pill-label radio"><input type="radio" name="officeClass" value="Showroom"><span>Showroom</span></label>
+                     <label class="pill-label radio"><input type="radio" name="officeClass" value="Virtual Office"><span>Virtual Office</span></label>
+                     <label class="pill-label radio"><input type="radio" name="officeClass" value="Warehouse"><span>Warehouse</span></label>
+                  </div>
+
+                  <div class="divider"></div>
+
+                  <!-- Lines of Business -->
+                  <p class="field-label"><span class="req">*</span> Lines of Business</p>
+                  <div class="table-wrapper">
+                     <table class="activity-table" id="lobTable">
+                        <thead>
+                           <tr>
+                              <th>Line of Business</th>
+                              <th>Nature of Business</th>
+                              <th>PSIC Code</th>
+                              <th>No. of Units</th>
+                              <th>Gross Sales / Capitalization (₱)</th>
+                              <th></th>
+                           </tr>
+                        </thead>
+                        <tbody id="lobBody">
+                           <tr>
+                              <td><input type="text" name="lob" class="table-input" placeholder="Line of business…"></td>
+                              <td><input type="text" name="nob" class="table-input" placeholder="Nature…"></td>
+                              <td><input type="text" name="psic" class="table-input" placeholder="Code"></td>
+                              <td><input type="text" name="units" class="table-input strict-number" inputmode="numeric" placeholder="0"></td>
+                              <td><input type="text" name="cap" class="table-input strict-number" inputmode="numeric" placeholder="0.00"></td>
+                              <td></td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <button type="button" id="addLobBtn" style="
+                     margin-top:10px; padding:8px 16px; background:transparent;
+                     border:1px solid var(--gray-300); border-radius:var(--radius-sm);
+                     font-size:.82rem; font-weight:600; font-family:'Inter',sans-serif;
+                     color:var(--gray-600); cursor:pointer; display:flex; align-items:center; gap:6px;
+                  ">
+                     <i class="fa-solid fa-plus"></i> Add Row
+                  </button>
+
+               </div>
+            </div>
+
+
+            <!-- Submit -->
+            <button type="submit" class="submit-btn" id="submitBtn">
+               <i class="fa-solid fa-paper-plane"></i> Submit Application
+            </button>
+
+         </form>
+      </section>
+
+      <footer class="page-footer">
+         <p>Business Permits &amp; Licensing Office &nbsp;&middot;&nbsp; City of Taguig &nbsp;&middot;&nbsp; 2nd Floor Taguig City Hall, Gen. Luna St., Tuktukan</p>
+      </footer>
+
+   </main>
+
+
+   <!-- ================================================================
+        JAVASCRIPT
+        ================================================================ -->
+   <script>
+
+      const API = 'api.php';
+
+
+      /* --------------------------------------------------
+         BUSINESS TYPE — conditional field enable/disable
+      -------------------------------------------------- */
+
+      const SOLE_TYPES = ['Sole Proprietorship', 'One Person Corporation'];
+
+      function applyBusinessTypeRules(selectedType) {
+         const isSolePerson = SOLE_TYPES.includes(selectedType);
+
+         // Owner Sex: only for sole/one-person
+         const ownerSexInputs = document.querySelectorAll('input[name="ownerSex"]');
+         ownerSexInputs.forEach(input => {
+            input.disabled = !isSolePerson;
+            if (!isSolePerson) input.checked = false;
+         });
+         document.getElementById('ownerSexGroup').classList.toggle('field-group-disabled', !isSolePerson);
+
+         // Corporate/Business Name: only for others
+         const corpInput = document.getElementById('corporateName');
+         corpInput.disabled = isSolePerson;
+         if (isSolePerson) corpInput.value = '';
+         document.getElementById('corporateNameGroup').classList.toggle('field-group-disabled', isSolePerson);
+
+         // Taxpayer name (Surname → Suffix): only for sole/one-person
+         const taxpayerInputs = document.querySelectorAll('#taxpayerNameGroup input');
+         taxpayerInputs.forEach(input => {
+            input.disabled = !isSolePerson;
+            if (!isSolePerson) input.value = '';
+         });
+         document.getElementById('taxpayerNameGroup').classList.toggle('field-group-disabled', !isSolePerson);
+      }
+
+      document.querySelectorAll('input[name="businessType"]').forEach(radio => {
+         radio.addEventListener('change', () => applyBusinessTypeRules(radio.value));
+      });
+
+
+      /* --------------------------------------------------
+         STRICT NUMBER INPUT — digits only
+      -------------------------------------------------- */
+
+      document.querySelectorAll('.strict-number').forEach(input => {
+         input.addEventListener('keydown', e => {
+            const allowed = ['Backspace','Delete','Tab','ArrowLeft','ArrowRight','Enter'];
+            if (!(/^[0-9]$/.test(e.key)) && !allowed.includes(e.key) && !e.ctrlKey && !e.metaKey) {
+               e.preventDefault();
+            }
+         });
+         input.addEventListener('input', function () {
+            this.value = this.value.replace(/[^0-9.]/g, '');
+         });
+      });
+
+
+      /* --------------------------------------------------
+         DYNAMIC LOB ROWS
+      -------------------------------------------------- */
+
+      document.getElementById('addLobBtn').addEventListener('click', () => {
+         const tbody = document.getElementById('lobBody');
+         const tr    = document.createElement('tr');
+         tr.innerHTML = `
+            <td><input type="text" name="lob"   class="table-input" placeholder="Line of business…"></td>
+            <td><input type="text" name="nob"   class="table-input" placeholder="Nature…"></td>
+            <td><input type="text" name="psic"  class="table-input" placeholder="Code"></td>
+            <td><input type="text" name="units" class="table-input strict-number" inputmode="numeric" placeholder="0"></td>
+            <td><input type="text" name="cap"   class="table-input strict-number" inputmode="numeric" placeholder="0.00"></td>
+            <td><button type="button" onclick="this.closest('tr').remove()" style="
+               background:none; border:none; color:#9ca3af; cursor:pointer; font-size:.9rem; padding:4px;
+            "><i class="fa-solid fa-xmark"></i></button></td>`;
+         tbody.appendChild(tr);
+
+         // Apply strict-number to new inputs
+         tr.querySelectorAll('.strict-number').forEach(input => {
+            input.addEventListener('keydown', e => {
+               const allowed = ['Backspace','Delete','Tab','ArrowLeft','ArrowRight','Enter'];
+               if (!(/^[0-9]$/.test(e.key)) && !allowed.includes(e.key) && !e.ctrlKey && !e.metaKey) {
+                  e.preventDefault();
+               }
+            });
+            input.addEventListener('input', function () {
+               this.value = this.value.replace(/[^0-9.]/g, '');
+            });
+         });
+      });
+
+
+      /* --------------------------------------------------
+         FORM SUBMISSION
+      -------------------------------------------------- */
+
+      document.getElementById('appForm').addEventListener('submit', async function (e) {
+         e.preventDefault();
+         if (!validateForm()) return;
+         await submitApplication();
+      });
+
+      function validateForm() {
+         let valid = true;
+
+         // Helper: mark a field invalid or clear
+         const mark = (el, bad) => {
+            if (bad) { el.classList.add('invalid');    valid = false; }
+            else       el.classList.remove('invalid');
+         };
+
+         // Required radio groups — check at least one selected
+         const radioGroups = {
+            apptype:        'Application Type',
+            modeOfPayment:  'Mode of Payment',
+            deliveryOption: 'Delivery Option',
+            paymentOption:  'Payment Option',
+            businessType:   'Business Structure',
+            ownerSex:       'Owner Sex',
+            officeClass:    'Office Classification',
+         };
+
+         let radioMissing = [];
+         Object.entries(radioGroups).forEach(([name, label]) => {
+            // Skip if ALL radios in the group are disabled
+            const radios = document.querySelectorAll(`input[name="${name}"]`);
+            const allDisabled = [...radios].every(r => r.disabled);
+            if (allDisabled) return;
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+               radioMissing.push(label);
+               valid = false;
+            }
+         });
+
+         if (radioMissing.length) {
+            toast(`Please select: ${radioMissing.join(', ')}`, true);
+         }
+
+         // Required text inputs
+         const required = [
+            document.getElementById('lcn'),
+            document.getElementById('tin'),
+            document.getElementById('taxpayerSurname'),
+            document.getElementById('taxpayerFirstName'),
+            document.getElementById('repSurname'),
+            document.getElementById('repFirstName'),
+            document.getElementById('repPosition'),
+            document.getElementById('repEmail'),
+            document.getElementById('safetyOfficerSurname'),
+            document.getElementById('safetyOfficerFirstName'),
+            document.getElementById('safetyEmail'),
+            document.getElementById('empEstMale'),
+            document.getElementById('empEstFemale'),
+            document.getElementById('empTaguigMale'),
+            document.getElementById('empTaguigFemale'),
+         ];
+
+         required.forEach(el => {
+            if (el.disabled) { el.classList.remove('invalid'); return; }
+            mark(el, !el.value.trim());
+         });
+
+         // TIN length
+         const tinEl = document.getElementById('tin');
+         if (tinEl.value.trim() && tinEl.value.length < 9) {
+            mark(tinEl, true);
+            toast('TIN must be 9–12 digits.', true);
+         }
+
+         // At least one complete LOB row required
+         const lobRows    = [...document.querySelectorAll('#lobBody tr')];
+         const filledLobs = lobRows.filter(tr => {
+            const inputs = tr.querySelectorAll('input');
+            return inputs[0].value.trim() && inputs[1].value.trim() && inputs[2].value.trim();
+         });
+         if (!filledLobs.length) {
+            toast('Fill in at least one complete Line of Business row (LOB, Nature, PSIC).', true);
+            valid = false;
+         }
+
+         return valid;
+      }
+
+      async function submitApplication() {
+         const btn = document.getElementById('submitBtn');
+         btn.disabled    = true;
+         btn.innerHTML   = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting…';
+
+         try {
+            const payload = buildPayload();
+            const res     = await fetch(`${API}?table=applications`, {
+               method:  'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body:    JSON.stringify(payload),
+            });
+
+            const data = await res.json();
+
+            if (data?.error) {
+               toast(data.error, true);
+            } else {
+               toast('Application submitted successfully!');
+               document.getElementById('appForm').reset();
+            }
+         } catch (err) {
+            toast('Could not reach the server — make sure api.php is running.', true);
+         } finally {
+            btn.disabled  = false;
+            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Application';
+         }
+      }
+
+      function buildPayload() {
+         const val  = id  => document.getElementById(id)?.value?.trim() ?? '';
+         const radio = name => document.querySelector(`input[name="${name}"]:checked`)?.value ?? '';
+         const num  = id  => Number(document.getElementById(id)?.value ?? 0);
+
+         // Build full name helpers
+         const buildName = (surname, first, middle, suffix) =>
+            [surname, first, middle, suffix].filter(Boolean).join(' ');
+
+         // Combine address parts
+         const addressParts = [
+            val('unitNo')      ? `Unit ${val('unitNo')}` : '',
+            val('houseFloorNo')? `Floor ${val('houseFloorNo')}` : '',
+            val('buildingName'),
+            val('street'),
+            val('barangay'),
+            val('city'),
+            val('zipCode'),
+         ].filter(Boolean);
+
+         // Collect LOB rows (non-empty ones only)
+         const lobs = [...document.querySelectorAll('#lobBody tr')]
+            .map(tr => {
+               const inputs = tr.querySelectorAll('input');
+               return {
+                  Line_of_Business:   inputs[0].value.trim(),
+                  Nature_of_Business: inputs[1].value.trim(),
+                  PSIC:               inputs[2].value.trim(),
+                  Number_of_Units:    Number(inputs[3].value) || 0,
+                  LOB_Gross_Sales:    Number(inputs[4].value) || 0,
+               };
+            })
+            .filter(r => r.Line_of_Business && r.Nature_of_Business && r.PSIC);
+
+         return {
+            app: {
+               LCN:                     val('lcn'),
+               Application_Date:        new Date().toISOString().slice(0, 10),
+               Application_Type:        radio('apptype'),
+               Payment_Mode:            radio('modeOfPayment'),
+               Payment_Option:          radio('paymentOption'),
+               Delivery_Option:         radio('deliveryOption'),
+               Trade_Name:              val('tradeName'),
+               Office_Address:          addressParts.join(', '),
+               Office_Classification:   radio('officeClass'),
+               Emp_Estab_Male:          num('empEstMale'),
+               Emp_Estab_Female:        num('empEstFemale'),
+               Emp_Taguig_Male:         num('empTaguigMale'),
+               Emp_Taguig_Female:       num('empTaguigFemale'),
+               Truck_Vehicle_Count:     num('truckCount'),
+               Van_Vehicle_Count:       num('vanCount'),
+               Motorcycle_Vehicle_Count:num('motorcycle'),
+               Other_Vehicle_Count:     num('otherVehicle'),
+            },
+            taxpayer: {
+               TIN:                        val('tin'),
+               Corporate_Name:             val('corporateName'),
+               Taxpayer_FullName:          buildName(val('taxpayerSurname'), val('taxpayerFirstName'), val('taxpayerMiddleName'), val('taxpayerSuffix')),
+               Business_Organization_Type: radio('businessType'),
+               Owner_Gender:               radio('ownerSex'),
+            },
+            authRep: {
+               Auth_Rep_FullName:     buildName(val('repSurname'), val('repFirstName'), val('repMiddleInitial'), val('repSuffix')),
+               Auth_Rep_Position:     val('repPosition'),
+               Auth_Rep_Telephone:    val('repTelNumber'),
+               Auth_Rep_MobileNumber: val('repMobileNumber'),
+               Auth_Rep_Email:        val('repEmail'),
+            },
+            safetyOfficer: {
+               Safety_Officer_FullName:     buildName(val('safetyOfficerSurname'), val('safetyOfficerFirstName'), val('safetyOfficerMiddleName'), val('safetyOfficerSuffix')),
+               Safety_Officer_Telephone:    val('safetyTelNumber'),
+               Safety_Officer_MobileNumber: val('safetyMobileNumber'),
+               Safety_Officer_Email:        val('safetyEmail'),
+            },
+            lobs,
+         };
+      }
+
+
+      /* --------------------------------------------------
+         TOAST
+      -------------------------------------------------- */
+
+      let toastTimer;
+
+      function toast(message, isError = false) {
+         clearTimeout(toastTimer);
+         document.querySelector('.toast')?.remove();
+
+         const el       = document.createElement('div');
+         el.className   = `toast ${isError ? 'err' : 'ok'}`;
+         el.textContent = message;
+
+         document.body.appendChild(el);
+         toastTimer = setTimeout(() => el.remove(), 5000);
+      }
+
+   </script>
+
+</body>
+</html>

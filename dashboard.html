@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business License System — City of Taguig</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+<!-- Auth guard: redirect to login if not authenticated -->
+<script>
+  (function () {
+    if (sessionStorage.getItem('bplo_auth') !== '1') {
+      window.location.replace('login.html');
+    }
+  })();
+</script>
+
+<nav class="bplo-nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <div class="logo-box">
+        <img src="City_of_Taguig_seal.svg.png" alt="Official Seal of the City of Taguig" class="seal-img" width="60" height="60" />
+      </div>
+      <div class="labels-container">
+        <div class="gov-label">Republic of the Philippines</div>
+        <div class="city-label">City of Taguig</div>
+        <div class="office-label">DISCLAIMER: NOT AN OFFICIAL GOVERNMENT WEBSITE, CREATED ONLY FOR THE PURPOSE OF SCHOOL PROJECT</div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <a href="ManualForm.html">
+        <button class="dashboard-btn">
+          <i class="fa-solid fa-chart-column"></i> Manual Form
+        </button>
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+  <main>
+
+    <div class="page-header">
+      <div class="ph-icon">
+        <i class="fa-solid fa-chart-line"></i>
+      </div>
+      <div>
+        <h1 class="page-title">License Management</h1>
+        <p class="page-subtitle">Manage applications, taxpayers, and business records.</p>
+      </div>
+    </div>
+
+    <div class="nav-tabs" id="navTabs"></div>
+
+    <div class="card">
+      <div class="card-body">
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search records…"
+              oninput="filterTable()"
+            />
+          </div>
+          <div class="toolbar-right">
+            <button class="btn btn-primary" onclick="openAdd()">
+              <i class="fa-solid fa-plus"></i> Add Application
+            </button>
+            <button class="btn btn-outline" id="btnView" onclick="openView()" disabled>
+              <i class="fa-solid fa-eye"></i> View
+            </button>
+            <button class="btn btn-outline" id="btnEdit" onclick="openEdit()" disabled>
+              <i class="fa-solid fa-pen"></i> Update
+            </button>
+            <button class="btn btn-danger" id="btnDelete" onclick="openDelete()" disabled>
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
+            <button class="btn btn-ghost" onclick="loadTable()">
+              <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data" id="mainTable"></table>
+        </div>
+
+        <div class="tfoot">
+          <span id="recordCount">0 records</span>
+          <span id="tabHint"></span>
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      Business Permits &amp; Licensing Office &nbsp;&middot;&nbsp; City of Taguig &nbsp;&middot;&nbsp;
+    </footer>
+
+  </main>
+
+
+  <div class="overlay" id="formModal" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span class="modal-icon"><i class="fa-solid fa-file-pen"></i></span>
+          <span id="formTitle">Application</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('formModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="formBody"></div>
+      <div class="modal-footer">
+        <button class="btn btn-muted" onclick="closeModal('formModal')">Close</button>
+        <button class="btn-submit" id="formSubmit" onclick="submitForm()">Save</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="overlay" id="deleteModal" style="display: none;">
+    <div class="del-modal">
+      <div class="del-icon">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <h3
+        id="delTitle"
+        style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.05rem; margin-bottom: 6px;"
+      >
+        Delete this record?
+      </h3>
+      <p
+        id="delDesc"
+        style="font-size: 0.85rem; color: var(--gray-600);"
+      >
+        This action is permanent and cannot be undone.
+      </p>
+      <div class="del-meta" id="delMeta" style="display: none;"></div>
+      <div class="del-btns">
+        <button class="btn btn-muted" onclick="closeModal('deleteModal')">Cancel</button>
+        <button class="btn btn-danger" id="delConfirm" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>

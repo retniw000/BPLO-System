@@ -1,8 +1,8 @@
 <?php
-$host = "127.0.0.1";
-$user = "root";
-$pass = "password123"; // ← enter your password if you set one, otherwise leave blank
-$db   = "business_license";
+$host = "sql308.infinityfree.com";
+$user = "if0_42163601";
+$pass = "89g1fV7LX8MB"; 
+$db   = "if0_42163601_business_license";
 
 $conn = new mysqli($host, $user, $pass, $db);
 

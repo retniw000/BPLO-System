@@ -1,9 +1,6 @@
+const API = 'api.php';
 
-    const API = 'api.php';
 
-
-    // Table schema: single source of truth for what columns to render.
-    // Each entry defines the DB field key, display label, and which color group it belongs to.
 
 
     const FULL_COLS = [
@@ -76,7 +73,7 @@
 
     const ADD_GROUPS = [
       {
-        title:  '1. Core Application',
+        title:  '1. Application',
         icon:   'fa-file-contract',
         fields: ['LCN', 'Application_Type', 'Payment_Mode', 'Payment_Option', 'Delivery_Option'],
       },
@@ -124,17 +121,17 @@
     const FIELD_META = {
       LCN:                        { label: 'LCN',                      required: true,  typeDef: 'text'   },
       Application_Date:           { label: 'Application Date',         required: true,  typeDef: 'date'   },
-      Application_Type:           { label: 'Application Type',         required: true,  typeDef: { type: 'select', opts: ['', 'New', 'Renewal', 'Amendment'] } },
-      Payment_Mode:               { label: 'Payment Mode',             required: false, typeDef: { type: 'select', opts: ['', 'Online', 'Cash', 'Check'] } },
-      Payment_Option:             { label: 'Payment Option',           required: false, typeDef: { type: 'select', opts: ['', 'Full Payment', 'Installment'] } },
-      Delivery_Option:            { label: 'Delivery Option',          required: false, typeDef: { type: 'select', opts: ['', 'Pick-up', 'Delivery'] } },
+      Application_Type:           { label: 'Application Type',         required: true,  typeDef: { type: 'select', opts: ['', 'New', 'Renewal', 'Transfer', 'Amendment'] } },
+      Payment_Mode:               { label: 'Payment Mode',             required: false, typeDef: { type: 'select', opts: ['', 'Annual', 'Bi-Annual', 'Quarterly'] } },
+      Payment_Option:             { label: 'Payment Option',           required: false, typeDef: { type: 'select', opts: ['', 'Online', 'Cash/Check', 'Card', 'eWallet'] } },
+      Delivery_Option:            { label: 'Delivery Option',          required: false, typeDef: { type: 'select', opts: ['', 'Pick-Up', 'Pickup', 'Courier'] } },
       TIN:                        { label: 'TIN',                      required: true,  typeDef: 'text'   },
       Corporate_Name:             { label: 'Corporate Name',           required: false, typeDef: 'text'   },
       Taxpayer_FullName:          { label: 'Taxpayer Full Name',       required: false, typeDef: 'text'   },
       Trade_Name:                 { label: 'Trade Name',               required: false, typeDef: 'text'   },
-      Business_Organization_Type: { label: 'Business Org Type',        required: true,  typeDef: { type: 'select', opts: ['', 'Corporation', 'Sole Proprietorship', 'One Person Corporation', 'Partnership'] } },
+      Business_Organization_Type: { label: 'Business Org Type',        required: true,  typeDef: { type: 'select', opts: ['', 'Sole Proprietorship', 'One Person Corporation', 'Partnership', 'Cooperative', 'Corporation'] } },
       Owner_Gender:               { label: 'Owner Gender',             required: false, typeDef: { type: 'select', opts: ['', 'Male', 'Female'] } },
-      Office_Classification:      { label: 'Office Classification',    required: true,  typeDef: { type: 'select', opts: ['', 'Head Office', 'Branch', 'Warehouse'] } },
+      Office_Classification:      { label: 'Office Classification',    required: true,  typeDef: { type: 'select', opts: ['', 'Main/Principal/Head Office', 'Main/Principal/HeadOffice', 'Branch', 'Administrative Office', 'Sales Office', 'Showroom', 'Virtual Office', 'Warehouse'] } },
       Office_Address:             { label: 'Office Address',           required: false, typeDef: 'text'   },
       Auth_Rep_ID:                { label: 'Auth Rep ID',              required: false, typeDef: 'text'   },
       Auth_Rep_FullName:          { label: 'Auth Rep Full Name',       required: true,  typeDef: 'text'   },
@@ -206,7 +203,11 @@
     async function loadTable() {
       renderTable([]);
       document.getElementById('recordCount').textContent = 'Loading…';
-      await loadFullView();
+      try {
+        await loadFullView();
+      } catch {
+        document.getElementById('recordCount').textContent = 'Failed to load records.';
+      }
     }
 
     async function loadFullView() {
@@ -392,6 +393,9 @@
 
       formMode = 'edit';
 
+      // DEBUG: inspect what the DB returned for this row
+      console.log('[openEdit] selectedRow:', JSON.stringify(selectedRow, null, 2));
+
       document.getElementById('formTitle').textContent    = `Edit Application — ${esc(selectedRow.LCN || '')}`;
       document.getElementById('formSubmit').textContent   = 'Update Application';
       document.getElementById('formSubmit').style.display = 'inline-block';
@@ -413,6 +417,9 @@
       if (!selectedRow) { toast('Select a record first.', true); return; }
 
       formMode = 'view';
+
+      // DEBUG: inspect what the DB returned for this row
+      console.log('[openView] selectedRow:', JSON.stringify(selectedRow, null, 2));
 
       document.getElementById('formTitle').textContent    = `View Application — ${esc(selectedRow.LCN || '')}`;
       document.getElementById('formSubmit').style.display = 'none'; // Hide submit button
@@ -438,6 +445,11 @@
     }
 
 
+    // DB column name → FIELD_META key aliases (when API returns a different key name)
+    const DB_ALIASES = {
+      Corporate_Name: 'Taxpayer_CorporateName',
+    };
+
     function buildUnifiedForm(data = {}) {
       let html = '';
 
@@ -454,8 +466,10 @@
           if (!meta) return;
 
           const isWide = ['Office_Address', 'Nature_of_Business'].includes(col) || col.includes('Email');
-          const value  = data[col] ?? '';
-          const locked = formMode === 'view' || (formMode === 'edit' && EDIT_PKS.has(col)) ? 'disabled' : '';
+          // Use DB_ALIASES to map field keys that differ between FIELD_META and the API response
+          const dbKey = DB_ALIASES[col] ?? col;
+          const value  = data[dbKey] ?? data[col] ?? '';
+          const locked = formMode === 'view' || (formMode === 'edit' && col === 'LCN') ? 'disabled' : '';
 
           html += `
             <div class="field ${isWide ? 'full' : ''}">
@@ -570,9 +584,7 @@
           markInvalid(psic);
           toast(`PSIC must be exactly 5 characters.`, true);
           valid = false;
-        }
-
-        if (psic.value && seenPSIC.has(psic.value.trim())) {
+        } else if (psic.value && seenPSIC.has(psic.value.trim())) {
           markInvalid(psic);
           toast(`Duplicate PSIC "${psic.value.trim()}"`, true);
           valid = false;
@@ -653,17 +665,27 @@
 
     async function submitEdit() {
       let valid = true;
-      const values = {};
+      // Seed read-only PK fields that render as <span> (not picked up by querySelectorAll)
+      const values = { LCN: selectedRow.LCN };
 
       document.querySelectorAll('[id^="f_"]').forEach(el => {
         const key = el.id.slice(2);
+
+        if (el.tagName === 'SPAN') {
+          // Read-only span — value comes from selectedRow
+          values[key] = selectedRow[key] ?? '';
+          return;
+        }
 
         if (el.disabled) {
           values[key] = selectedRow[key] ?? '';
           return;
         }
 
-        if (key === 'Auth_Rep_MobileNumber' || key === 'Safety_Officer_MobileNumber') {
+        if (key === 'TIN') {
+          if (el.value.length !== 12) { markInvalid(el); valid = false; }
+          else markValid(el);
+        } else if (key === 'Auth_Rep_MobileNumber' || key === 'Safety_Officer_MobileNumber') {
           if (el.value && el.value.length !== 11) { markInvalid(el); valid = false; }
           else markValid(el);
         } else if (el.required && !el.value.trim()) {
@@ -722,7 +744,7 @@
           Other_Vehicle_Count:     values.Other_Vehicle_Count,
         },
         taxpayer: {
-          TIN:                        selectedRow.TIN,
+          TIN:                        values.TIN,
           Corporate_Name:             values.Corporate_Name,
           Taxpayer_FullName:          values.Taxpayer_FullName,
           Business_Organization_Type: values.Business_Organization_Type,
@@ -828,26 +850,62 @@
       const td  = meta.typeDef;
 
       if (col === 'TIN') {
+        if (disabled) {
+          return `<span id="${id}" class="field-readonly">${esc(String(value || '—'))}</span>`;
+        }
         return `<input
           type="text" id="${id}" value="${esc(String(value))}"
-          ${disabled} ${req}
+          ${req}
           placeholder="12-digit TIN" maxlength="12"
           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12)"
         />`;
       }
 
       if (td && typeof td === 'object' && td.type === 'select') {
-        const normalize = s => String(s ?? '').trim().toLowerCase();
-        const options = td.opts.map(opt =>
-          `<option value="${esc(opt)}" ${normalize(opt) === normalize(value) ? 'selected' : ''}>${opt || '— select —'}</option>`
-        ).join('');
-        return `<select id="${id}" ${disabled} ${req}>${options}</select>`;
+        // Normalize: treat JS null/undefined AND PHP string "NULL" as empty
+        const normalize = s => {
+          const str = String(s ?? '').trim();
+          return str.toUpperCase() === 'NULL' ? '' : str;
+        };
+        const currentRaw  = normalize(value);
+        const currentNorm = currentRaw.toLowerCase().replace(/\s+/g, ' ');
+
+        // When the field is locked/disabled, render a plain read-only span so browsers
+        // don't show just the word "select" inside a greyed-out dropdown.
+        if (disabled) {
+          const display = currentRaw || '—';
+          return `<span id="${id}" class="field-readonly">${esc(display)}</span>`;
+        }
+
+        let anySelected = false;
+        const options = td.opts.map(opt => {
+          const optVal  = opt ?? '';
+          const optNorm = normalize(optVal).toLowerCase().replace(/\s+/g, ' ');
+          const isSelected = optNorm === currentNorm;
+          if (isSelected) anySelected = true;
+
+          const label = optVal || '— select —';
+          return `<option value="${esc(optVal)}" ${isSelected ? 'selected' : ''}>${label}</option>`;
+        }).join('');
+
+        // If nothing matched but there IS a stored value, inject it as selected
+        // so it never silently falls back to a blank "— select —"
+        const fallback = (!anySelected && currentRaw)
+          ? `<option value="${esc(currentRaw)}" selected>${esc(currentRaw)}</option>`
+          : '';
+
+        return `<select id="${id}" ${req}>${options}${fallback}</select>`;
       }
 
+
+
       if (col === 'Auth_Rep_MobileNumber' || col === 'Safety_Officer_MobileNumber') {
+        if (disabled) {
+          return `<span id="${id}" class="field-readonly">${esc(String(value || '—'))}</span>`;
+        }
         return `<input
           type="text" id="${id}" value="${esc(String(value))}"
-          ${disabled} ${req}
+          ${req}
           placeholder="11-digit mobile number" maxlength="11" minlength="11"
           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)"
         />`;
@@ -855,9 +913,12 @@
 
       const type = typeof td === 'string' ? td : 'text';
       const minAttr = type === 'number' ? 'min="0"' : '';
+      if (disabled) {
+        return `<span id="${id}" class="field-readonly">${esc(String(value || '—'))}</span>`;
+      }
       return `<input
         type="${type}" id="${id}" value="${esc(String(value))}"
-        ${disabled} ${req} ${minAttr} placeholder="${esc(meta.label)}"
+        ${req} ${minAttr} placeholder="${esc(meta.label)}"
       />`;
     }
 

@@ -7,25 +7,11 @@
    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
    <link rel="stylesheet" href="ManualForm.css">
-   <style>
-      /* Disabled field group — greyed out, not interactive */
-      .field-group-disabled {
-         opacity: 0.42;
-         pointer-events: none;
-         user-select: none;
-      }
-      .field-group-disabled input,
-      .field-group-disabled .pill-label {
-         cursor: not-allowed;
-      }
-   </style>
+  
    <title>Unified Business Permit Application Form</title>
 </head>
 <body>
 
-   <!-- ================================================================
-        NAVIGATION
-        ================================================================ -->
    <nav>
       <div class="nav-inner">
          <div class="nav-left">
@@ -37,7 +23,7 @@
             </div>
          </div>
          <div class="nav-right">
-            <a href="index.html">
+            <a href="dashboard.html">
                <button class="dashboard-btn">
                   <i class="fa-solid fa-chart-column"></i> CRUD System
                </button>
@@ -47,9 +33,6 @@
    </nav>
 
 
-   <!-- ================================================================
-        MAIN
-        ================================================================ -->
    <main>
 
       <div class="page-header">
@@ -67,9 +50,6 @@
          <form id="appForm" autocomplete="off">
 
 
-            <!-- ============================================================
-                 SECTION 1 — APPLICATION TYPE & PAYMENT
-                 ============================================================ -->
             <div class="form-section">
                <div class="section-header">
                   <span class="section-icon"><i class="fa-solid fa-list-check"></i></span>
@@ -84,7 +64,6 @@
                <div class="section-body">
                   <div class="form-row three-col">
 
-                     <!-- Application Type -->
                      <div class="col">
                         <p class="field-label"><span class="req">*</span> Application Type</p>
                         <div class="pill-group column">
@@ -95,7 +74,6 @@
                         </div>
                      </div>
 
-                     <!-- Payment columns -->
                      <div class="col">
                         <p class="field-label"><span class="req">*</span> Mode of Payment</p>
                         <div class="pill-group column">
@@ -124,9 +102,6 @@
             </div>
 
 
-            <!-- ============================================================
-                 SECTION 2 — BUSINESS INFORMATION & REGISTRATION
-                 ============================================================ -->
             <div class="form-section">
                <div class="section-header">
                   <span class="section-icon"><i class="fa-solid fa-building"></i></span>
@@ -137,13 +112,11 @@
                </div>
                <div class="section-body">
 
-                  <!-- LCN -->
                   <div class="input-group" style="max-width:260px">
                      <label for="lcn"><span class="req">*</span> LCN (License Control Number)</label>
                      <input type="text" id="lcn" name="lcn" placeholder="Local Control Number">
                   </div>
 
-                  <!-- Business Structure -->
                   <p class="field-label top-gap"><span class="req">*</span> Business Structure</p>
                   <div class="pill-group wrap">
                      <label class="pill-label radio"><input type="radio" name="businessType" value="Sole Proprietorship"><span>Sole Proprietorship</span></label>
@@ -153,7 +126,6 @@
                      <label class="pill-label radio"><input type="radio" name="businessType" value="Corporation"><span>Corporation</span></label>
                   </div>
 
-                  <!-- Owner Sex -->
                   <div class="form-row two-col top-gap">
                      <div class="col" id="ownerSexGroup">
                         <p class="field-label"><span class="req">*</span> Owner Sex</p>
@@ -166,7 +138,6 @@
 
                   <div class="divider"></div>
 
-                  <!-- TIN -->
                   <div class="form-row two-col">
                      <div class="col">
                         <div class="input-group">
@@ -183,7 +154,6 @@
                      </div>
                   </div>
 
-                  <!-- Taxpayer Name -->
                   <div id="taxpayerNameGroup" class="form-row four-col">
                      <div class="col">
                         <div class="input-group">
@@ -211,7 +181,6 @@
                      </div>
                   </div>
 
-                  <!-- Trade Name -->
                   <div class="input-group">
                      <label for="tradeName">Trade Name / Franchise <span class="optional-tag">If applicable</span></label>
                      <input type="text" id="tradeName" name="tradeName" placeholder="Trade or franchise name">
@@ -219,7 +188,6 @@
 
                   <div class="divider"></div>
 
-                  <!-- Office Address -->
                   <p class="field-label"><span class="req">*</span> Office Address</p>
                   <div class="form-row three-col">
                      <div class="col-xs">
@@ -271,10 +239,8 @@
 
                   <div class="divider"></div>
 
-                  <!-- Demographics & Assets -->
                   <div class="stats-grid">
 
-                     <!-- Employees in Establishment -->
                      <div class="stat-card">
                         <p class="stat-title"><i class="fa-solid fa-users"></i> Employees in Establishment</p>
                         <div class="form-row">
@@ -295,7 +261,7 @@
                         </div>
                      </div>
 
-                     <!-- Employees in Taguig -->
+                     
                      <div class="stat-card">
                         <p class="stat-title"><i class="fa-solid fa-house-user"></i> Employees in Taguig</p>
                         <div class="form-row">
@@ -316,7 +282,6 @@
                         </div>
                      </div>
 
-                     <!-- Delivery Vehicles -->
                      <div class="stat-card">
                         <p class="stat-title"><i class="fa-solid fa-truck"></i> Delivery Vehicles</p>
                         <div class="form-row">
@@ -351,15 +316,12 @@
                         </div>
                      </div>
 
-                  </div><!-- /stats-grid -->
+                  </div>
 
                </div>
             </div>
 
 
-            <!-- ============================================================
-                 SECTION 3 — BUSINESS CONTACTS
-                 ============================================================ -->
             <div class="form-section">
                <div class="section-header">
                   <span class="section-icon"><i class="fa-solid fa-address-card"></i></span>
@@ -370,7 +332,6 @@
                </div>
                <div class="section-body">
 
-                  <!-- Authorized Representative -->
                   <p class="field-label"><span class="req">*</span> Authorized Representative</p>
                   <div class="form-row four-col">
                      <div class="col">
@@ -430,7 +391,6 @@
 
                   <div class="divider"></div>
 
-                  <!-- Safety Officer -->
                   <p class="field-label"><span class="req">*</span> Designated Safety Officer</p>
                   <div class="form-row four-col">
                      <div class="col">
@@ -485,9 +445,6 @@
             </div>
 
 
-            <!-- ============================================================
-                 SECTION 4 — BUSINESS ACTIVITY
-                 ============================================================ -->
             <div class="form-section">
                <div class="section-header">
                   <span class="section-icon"><i class="fa-solid fa-briefcase"></i></span>
@@ -498,7 +455,6 @@
                </div>
                <div class="section-body">
 
-                  <!-- Office Classification -->
                   <p class="field-label"><span class="req">*</span> Office Classification</p>
                   <div class="pill-group wrap">
                      <label class="pill-label radio"><input type="radio" name="officeClass" value="Main/Principal/Head Office"><span>Main / Principal / Head Office</span></label>
@@ -512,7 +468,6 @@
 
                   <div class="divider"></div>
 
-                  <!-- Lines of Business -->
                   <p class="field-label"><span class="req">*</span> Lines of Business</p>
                   <div class="table-wrapper">
                      <table class="activity-table" id="lobTable">
@@ -551,7 +506,6 @@
             </div>
 
 
-            <!-- Submit -->
             <button type="submit" class="submit-btn" id="submitBtn">
                <i class="fa-solid fa-paper-plane"></i> Submit Application
             </button>
@@ -566,9 +520,6 @@
    </main>
 
 
-   <!-- ================================================================
-        JAVASCRIPT
-        ================================================================ -->
    <script>
 
       const API = 'api.php';
@@ -859,10 +810,6 @@
          };
       }
 
-
-      /* --------------------------------------------------
-         TOAST
-      -------------------------------------------------- */
 
       let toastTimer;
 

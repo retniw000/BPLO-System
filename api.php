@@ -13,12 +13,8 @@ $table  = $_GET['table'] ?? '';
 $body   = json_decode(file_get_contents("php://input"), true);
 
 // ── Special case: cascade-delete an entire Application in one transaction ─────
-// The UI sends the selected record, but we defensively accept LCN from either
-// the JSON body or query-string params.
 if ($method === 'DELETE' && $table === 'fullApplication') {
     $lcn = $body['LCN'] ?? $_GET['LCN'] ?? null;
-    
-
     
     if (!$lcn) {
         http_response_code(400);
@@ -33,22 +29,22 @@ if ($method === 'DELETE' && $table === 'fullApplication') {
     $conn->begin_transaction();
     try {
         // 1 — Operations (must go first; FK child of Application)
-        $stmt = $conn->prepare("DELETE FROM `Establishment_Operations` WHERE `LCN` = ?");
+        $stmt = $conn->prepare("DELETE FROM `establishment_operations` WHERE `LCN` = ?");
         $stmt->bind_param("s", $lcn);
         $stmt->execute();
 
         // 2 — Application
-        $stmt = $conn->prepare("DELETE FROM `Application` WHERE `LCN` = ?");
+        $stmt = $conn->prepare("DELETE FROM `application` WHERE `LCN` = ?");
         $stmt->bind_param("s", $lcn);
         $stmt->execute();
 
         // 3 — Auth Rep (skip if another Application still points to it)
         if ($authRepID) {
             $stmt = $conn->prepare(
-                "DELETE FROM `Auth_Rep`
+                "DELETE FROM `auth_rep`
                   WHERE `Auth_Rep_ID` = ?
                     AND NOT EXISTS (
-                        SELECT 1 FROM `Application` WHERE `Auth_Rep_ID` = ?
+                        SELECT 1 FROM `application` WHERE `Auth_Rep_ID` = ?
                     )"
             );
             $stmt->bind_param("ss", $authRepID, $authRepID);
@@ -58,10 +54,10 @@ if ($method === 'DELETE' && $table === 'fullApplication') {
         // 4 — Safety Officer (same guard)
         if ($safetyOfficerID) {
             $stmt = $conn->prepare(
-                "DELETE FROM `Safety_Officer`
+                "DELETE FROM `safety_officer`
                   WHERE `Safety_Officer_ID` = ?
                     AND NOT EXISTS (
-                        SELECT 1 FROM `Application` WHERE `Safety_Officer_ID` = ?
+                        SELECT 1 FROM `application` WHERE `Safety_Officer_ID` = ?
                     )"
             );
             $stmt->bind_param("ss", $safetyOfficerID, $safetyOfficerID);
@@ -71,10 +67,10 @@ if ($method === 'DELETE' && $table === 'fullApplication') {
         // 5 — Taxpayer (same guard)
         if ($tin) {
             $stmt = $conn->prepare(
-                "DELETE FROM `Taxpayer`
+                "DELETE FROM `taxpayer`
                   WHERE `TIN` = ?
                     AND NOT EXISTS (
-                        SELECT 1 FROM `Application` WHERE `TIN` = ?
+                        SELECT 1 FROM `application` WHERE `TIN` = ?
                     )"
             );
             $stmt->bind_param("ss", $tin, $tin);
@@ -102,7 +98,6 @@ if ($method === 'PUT' && $table === 'fullApplication') {
 
     $conn->begin_transaction();
     try {
-        // Move Auth_Rep_Position from the authRep object to the app object
         if (isset($body['authRep']['Auth_Rep_Position'])) {
             $body['app']['Auth_Rep_Position'] = $body['authRep']['Auth_Rep_Position'];
             unset($body['authRep']['Auth_Rep_Position']);
@@ -110,36 +105,34 @@ if ($method === 'PUT' && $table === 'fullApplication') {
 
         // 1. Update Core Application
         if (!empty($body['app'])) {
-            updateRow($conn, "Application", $body['app'], ["LCN" => $body['app']['LCN']]);
+            updateRow($conn, "application", $body['app'], ["LCN" => $body['app']['LCN']]);
         }
         // 2. Update Taxpayer
         if (!empty($body['taxpayer']) && !empty($body['taxpayer']['TIN'])) {
-            updateRow($conn, "Taxpayer", $body['taxpayer'], ["TIN" => $body['taxpayer']['TIN']]);
+            updateRow($conn, "taxpayer", $body['taxpayer'], ["TIN" => $body['taxpayer']['TIN']]);
         }
         // 3. Update Auth Rep
         if (!empty($body['authRep']) && !empty($body['authRep']['Auth_Rep_ID'])) {
-            updateRow($conn, "Auth_Rep", $body['authRep'], ["Auth_Rep_ID" => $body['authRep']['Auth_Rep_ID']]);
+            updateRow($conn, "auth_rep", $body['authRep'], ["Auth_Rep_ID" => $body['authRep']['Auth_Rep_ID']]);
         }
         // 4. Update Safety Officer
         if (!empty($body['safetyOfficer']) && !empty($body['safetyOfficer']['Safety_Officer_ID'])) {
-            updateRow($conn, "Safety_Officer", $body['safetyOfficer'], ["Safety_Officer_ID" => $body['safetyOfficer']['Safety_Officer_ID']]);
+            updateRow($conn, "safety_officer", $body['safetyOfficer'], ["Safety_Officer_ID" => $body['safetyOfficer']['Safety_Officer_ID']]);
         }
         // 5. Update LOB and Operations
         if (!empty($body['lob']) && !empty($body['lob']['PSIC'])) {
-            // Update the master Line_of_Business name
             if (isset($body['lob']['Line_of_Business'])) {
-                updateRow($conn, "LOB", 
+                updateRow($conn, "lob", 
                     ["Line_of_Business" => $body['lob']['Line_of_Business']], 
                     ["PSIC" => $body['lob']['PSIC']]
                 );
             }
-            // Update the specific establishment operations data
             $opsData = [
                 "Nature_of_Business" => $body['lob']['Nature_of_Business'] ?? '',
                 "Number_of_Units"    => $body['lob']['Number_of_Units'] ?? 0,
                 "LOB_Gross_Sales"    => $body['lob']['LOB_Gross_Sales'] ?? 0
             ];
-            updateRow($conn, "Establishment_Operations", $opsData, [
+            updateRow($conn, "establishment_operations", $opsData, [
                 "LCN" => $body['app']['LCN'],
                 "PSIC" => $body['lob']['PSIC']
             ]);
@@ -157,12 +150,12 @@ if ($method === 'PUT' && $table === 'fullApplication') {
 
 // Map frontend table names to DB table names and their primary keys
 $tables = [
-    "applications"   => ["db" => "Application",              "pk" => ["LCN"]],
-    "taxpayers"      => ["db" => "Taxpayer",                 "pk" => ["TIN"]],
-    "authReps"       => ["db" => "Auth_Rep",                 "pk" => ["Auth_Rep_ID"]],
-    "safetyOfficers" => ["db" => "Safety_Officer",           "pk" => ["Safety_Officer_ID"]],
-    "lobs"           => ["db" => "LOB",                      "pk" => ["PSIC"]],
-    "operations"     => ["db" => "Establishment_Operations", "pk" => ["LCN", "PSIC"]],
+    "applications"   => ["db" => "application",              "pk" => ["LCN"]],
+    "taxpayers"      => ["db" => "taxpayer",                 "pk" => ["TIN"]],
+    "authReps"       => ["db" => "auth_rep",                 "pk" => ["Auth_Rep_ID"]],
+    "safetyOfficers" => ["db" => "safety_officer",           "pk" => ["Safety_Officer_ID"]],
+    "lobs"           => ["db" => "lob",                      "pk" => ["PSIC"]],
+    "operations"     => ["db" => "establishment_operations", "pk" => ["LCN", "PSIC"]],
 ];
 
 if (!array_key_exists($table, $tables)) {
@@ -187,7 +180,6 @@ if ($method === "GET") {
 elseif ($method === "POST") {
     if (empty($body)) { http_response_code(400); echo json_encode(["error" => "No data"]); exit(); }
 
-    // Special case: submit full application
     if ($table === "applications" && isset($body['app'])) {
         $conn->begin_transaction();
         try {
@@ -195,14 +187,14 @@ elseif ($method === "POST") {
                 throw new Exception("Missing taxpayer, authRep, safetyOfficer, or lobs data in full application payload.");
             }
 
-            insertOrIgnore($conn, "Taxpayer", $body['taxpayer']);
+            insertOrIgnore($conn, "taxpayer", $body['taxpayer']);
             
             $authRepRow = $body['authRep'];
             $position   = $authRepRow['Auth_Rep_Position'] ?? null;
             unset($authRepRow['Auth_Rep_Position']);
 
-            insertOrIgnore($conn, "Auth_Rep", $authRepRow);
-            insertOrIgnore($conn, "Safety_Officer", $body['safetyOfficer']);
+            insertOrIgnore($conn, "auth_rep", $authRepRow);
+            insertOrIgnore($conn, "safety_officer", $body['safetyOfficer']);
 
             $authRepEmail = $authRepRow['Auth_Rep_Email'] ?? null;
             $safetyEmail  = $body['safetyOfficer']['Safety_Officer_Email'] ?? null;
@@ -210,14 +202,13 @@ elseif ($method === "POST") {
             if (!$authRepEmail) throw new Exception('Auth_Rep_Email is required to resolve Auth_Rep_ID.');
             if (!$safetyEmail)  throw new Exception('Safety_Officer_Email is required to resolve Safety_Officer_ID.');
 
-            // Resolve IDs by primary key lookups
-            $stmt = $conn->prepare("SELECT `Auth_Rep_ID` FROM `Auth_Rep` WHERE `Auth_Rep_Email` = ? LIMIT 1");
+            $stmt = $conn->prepare("SELECT `Auth_Rep_ID` FROM `auth_rep` WHERE `Auth_Rep_Email` = ? LIMIT 1");
             $stmt->bind_param("s", $authRepEmail);
             $stmt->execute();
             $res = $stmt->get_result();
             $authRepId = ($res && $res->num_rows) ? $res->fetch_assoc()['Auth_Rep_ID'] : null;
 
-            $stmt = $conn->prepare("SELECT `Safety_Officer_ID` FROM `Safety_Officer` WHERE `Safety_Officer_Email` = ? LIMIT 1");
+            $stmt = $conn->prepare("SELECT `Safety_Officer_ID` FROM `safety_officer` WHERE `Safety_Officer_Email` = ? LIMIT 1");
             $stmt->bind_param("s", $safetyEmail);
             $stmt->execute();
             $res = $stmt->get_result();
@@ -228,7 +219,7 @@ elseif ($method === "POST") {
 
             foreach ($body['lobs'] as $lob) { 
                 if (empty($lob['PSIC'])) continue; 
-                insertOrIgnore($conn, "LOB", ["PSIC" => $lob['PSIC'], "Line_of_Business" => $lob['Line_of_Business'] ?? '']);
+                insertOrIgnore($conn, "lob", ["PSIC" => $lob['PSIC'], "Line_of_Business" => $lob['Line_of_Business'] ?? '']);
             }
 
             $app = $body['app'];
@@ -237,11 +228,11 @@ elseif ($method === "POST") {
             $app['Auth_Rep_Position'] = $position;
             $app['Safety_Officer_ID'] = $safetyOfficerId;
             
-            insertRow($conn, "Application", $app);
+            insertRow($conn, "application", $app);
 
             foreach ($body['lobs'] as $lob) {
                 if (empty($lob['PSIC'])) continue;
-                insertRow($conn, "Establishment_Operations", [
+                insertRow($conn, "establishment_operations", [
                     "LCN"                => $app['LCN'],
                     "PSIC"               => $lob['PSIC'],
                     "Nature_of_Business" => $lob['Nature_of_Business'] ?? '',
@@ -258,7 +249,6 @@ elseif ($method === "POST") {
             echo json_encode(["error" => $e->getMessage()]);
         }
     } else {
-        // Single table insert
         try {
             insertRow($conn, $dbTable, $body);
             echo json_encode(["success" => true]);
@@ -393,7 +383,6 @@ function insertOrIgnore($conn, $table, $data) {
 }
 
 function updateRow($conn, $table, $data, $conditions) {
-    // Remove primary keys from the data payload so we don't try to update them
     foreach ($conditions as $pk => $val) {
         unset($data[$pk]);
     }

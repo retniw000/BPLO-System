@@ -3,275 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taguig BPLO | Unified Business Permit System</title>
+    <title>Taguig BPLO | Business Permit System</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         :root {
-            --blue:      #1e3a8a;
-            --blue-soft: #eff6ff;
-            --blue-mid:  #dbeafe;
-            --red:       #dc2626;
-            --red-dark:  #b91c1c;
-            --red-soft:  #fef2f2;
-            --gray-50:   #f9fafb;
-            --gray-100:  #f3f4f6;
-            --gray-300:  #d1d5db;
-            --gray-400:  #9ca3af;
-            --gray-500:  #6b7280;
-            --gray-600:  #4b5563;
-            --gray-900:  #111827;
-            --white:     #ffffff;
+            --navy: #1e3a8a;
+            --red:  #dc2626;
+            --bg:   #f1f3f7;
+            --border: #e2e6ed;
+            --text: #0f172a;
+            --muted: #64748b;
+            --faint: #94a3b8;
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--white);
-            color: var(--gray-900);
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* ── NAV ── */
+        /* NAV */
         nav {
-            border-top: 3px solid var(--red);
-            height: 64px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            height: 56px;
             display: flex;
             align-items: center;
-            padding: 0 40px;
-            border-bottom: 1px solid var(--gray-300);
-            background: var(--white);
+            padding: 0 36px;
+            border-top: 2px solid var(--red);
         }
 
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand img { height: 32px; }
+        .brand-sep { width: 1px; height: 20px; background: var(--border); }
 
-        .nav-logo { height: 42px; }
-
-        .nav-divider {
-            width: 1px;
-            height: 30px;
-            background: var(--gray-300);
-        }
-
-        .nav-text span { display: block; line-height: 1.25; }
-
-        .nav-republic {
-            font-size: 0.68rem;
-            color: var(--gray-400);
-            text-transform: uppercase;
-            letter-spacing: 0.7px;
-        }
-
-        .nav-city {
+        .brand-city {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.97rem;
+            font-size: 0.85rem;
             font-weight: 800;
-            color: var(--blue);
+            color: var(--navy);
+            display: block;
+            line-height: 1.2;
         }
 
-        .nav-office {
-            font-size: 0.73rem;
-            font-weight: 500;
-            color: var(--gray-600);
+        .brand-dept {
+            font-size: 0.65rem;
+            color: var(--faint);
+            display: block;
         }
 
-        /* ── MAIN ── */
+        /* MAIN */
         main {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 40px 20px;
-            background: var(--gray-50);
             background-image: url('white_bg_city.png');
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
         }
 
-        /* ── CARD ── */
+        /* CARD */
         .card {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 56px 52px;
-            max-width: 560px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 44px 40px;
             width: 100%;
+            max-width: 420px;
             text-align: center;
-            border: 1px solid var(--gray-300);
-            box-shadow:
-                0 1px 2px rgba(0,0,0,0.04),
-                0 8px 32px rgba(0,0,0,0.07);
-            position: relative;
-            overflow: hidden;
         }
 
-        /* subtle blue top border accent */
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: var(--blue);
-            border-radius: 16px 16px 0 0;
+        .card img {
+            height: 56px;
+            margin-bottom: 20px;
+            opacity: 0.9;
         }
 
-        .card-seal {
-            height: 68px;
-            margin-bottom: 24px;
-            opacity: 0.92;
-        }
-
-        .tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--red);
-            background: var(--red-soft);
-            padding: 5px 13px;
-            border-radius: 100px;
-            margin-bottom: 18px;
-        }
-
-        h1 {
+        .card h1 {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 2rem;
+            font-size: 1.25rem;
             font-weight: 800;
-            color: var(--blue);
-            line-height: 1.2;
-            margin-bottom: 12px;
+            color: var(--navy);
+            margin-bottom: 8px;
         }
 
-        .subtitle {
-            font-size: 0.97rem;
-            color: var(--gray-500);
-            line-height: 1.65;
-            margin-bottom: 36px;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
+        .card p {
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 32px;
         }
 
-        /* ── BUTTONS ── */
-        .actions {
+        .btns {
             display: flex;
+            flex-direction: column;
             gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
         }
 
         .btn {
-            display: inline-flex;
+            display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            padding: 11px 26px;
-            font-size: 0.93rem;
-            font-weight: 600;
+            padding: 12px 20px;
             border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
             text-decoration: none;
-            transition: all 0.18s ease;
-            cursor: pointer;
-            border: 1.5px solid transparent;
-            white-space: nowrap;
+            transition: opacity 0.15s, transform 0.15s;
         }
 
-        .btn-primary {
+        .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+        .btn-red {
             background: var(--red);
-            color: var(--white);
-            border-color: var(--red);
-            box-shadow: 0 2px 8px rgba(220,38,38,0.22);
-        }
-        .btn-primary:hover {
-            background: var(--red-dark);
-            border-color: var(--red-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 14px rgba(220,38,38,0.3);
+            color: #fff;
         }
 
-        .btn-ghost {
-            background: var(--blue-soft);
-            color: var(--blue);
-            border-color: var(--blue-mid);
-        }
-        .btn-ghost:hover {
-            background: var(--blue-mid);
-            transform: translateY(-2px);
+        .btn-outline {
+            background: transparent;
+            color: var(--navy);
+            border: 1px solid var(--border);
         }
 
-        /* ── FOOTER ── */
-        footer {
-            padding: 14px 40px;
-            border-top: 1px solid var(--gray-100);
-            text-align: center;
-            font-size: 0.73rem;
-            color: var(--gray-400);
-        }
+        .btn-outline:hover { background: var(--bg); }
 
-        /* ── RESPONSIVE ── */
-        @media (max-width: 600px) {
-            nav { padding: 0 20px; }
-            .card { padding: 40px 24px; }
-            h1 { font-size: 1.6rem; }
-            .actions { flex-direction: column; }
-            .btn { justify-content: center; }
-        }
+        
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="nav-brand">
-            <img src="City_of_Taguig_seal.svg.png" alt="Taguig Seal" class="nav-logo">
-            <div class="nav-divider"></div>
-            <div class="nav-text">
-                <span class="nav-republic">Republic of the Philippines</span>
-                <span class="nav-city">City of Taguig</span>
-                <span class="nav-office">Business Permits &amp; Licensing Office</span>
+        <div class="brand">
+            <img src="City_of_Taguig_seal.svg.png" alt="Taguig Seal">
+            <div class="brand-sep"></div>
+            <div>
+                <span class="brand-city">City of Taguig</span>
+                <span class="brand-dept">Business Permits &amp; Licensing Office</span>
             </div>
         </div>
     </nav>
 
     <main>
         <div class="card">
-
-            <img src="City_of_Taguig_seal.svg.png" alt="Taguig City Seal" class="card-seal">
-
-            <div class="tag">
-                <i class="fa-solid fa-file-contract"></i> Unified System
-            </div>
-
-            <h1>Unified Business<br>Permit Application</h1>
-
-            <p class="subtitle">
-                Process your business licensing requirements quickly and securely — all in one place.
-            </p>
-
-            <div class="actions">
-                <a href="ManualForm.html" class="btn btn-primary">
+            <img src="City_of_Taguig_seal.svg.png" alt="Taguig City Seal">
+            <h1>Business Permit Application</h1>
+            <p>This is not an official government website.</p>
+            <div class="btns">
+                <a href="ManualForm.html" class="btn btn-red">
                     <i class="fa-solid fa-pen-to-square"></i> Submit Application
                 </a>
-                <a href="login.html" class="btn btn-ghost">
+                <a href="login.html" class="btn btn-outline">
                     <i class="fa-solid fa-lock"></i> View Records
                 </a>
             </div>
-
         </div>
     </main>
 
-  
+
 
 </body>
 </html>

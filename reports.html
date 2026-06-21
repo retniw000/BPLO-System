@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+   <title>Advanced Reports - Unified Business Permit System</title>
+   <style>
+      /* ─── RESET & ROOT ────────────────────────── */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+         --red: #EF3340; --red-dark: #c9222e; --blue: #1E4E9E; --gold: #FDB913; --green: #10B981;
+         --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-300: #d1d5db; --gray-400: #9ca3af;
+         --gray-600: #4b5563; --gray-800: #1f2937; --white: #ffffff;
+         --radius: 8px; --radius-sm: 4px; --transition: .2s ease;
+      }
+      body { font-family: 'Inter', Arial, sans-serif; background-color: #f4f5f7; color: var(--gray-800); line-height: 1.6; min-height: 100vh; }
+      
+      /* ─── NAV & LAYOUT ────────────────────────── */
+      nav { position: sticky; top: 0; z-index: 100; background: var(--red); border-bottom: 1px solid var(--red-dark); }
+      .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; padding: 12px 24px; gap: 16px; flex-wrap: wrap; }
+      .nav-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 280px; }
+      .logo { width: 50px; height: 50px; object-fit: contain; }
+      .header-text { display: flex; flex-direction: column; gap: 1px; }
+      .gov-label { font-size: .7rem; font-weight: 600; color: rgba(255,255,255,.75); text-transform: uppercase; }
+      .city-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--white); }
+      .office-label { font-size: .75rem; color: rgba(255,255,255,.8); font-weight: 400; }
+      .nav-right { display: flex; gap: 12px; align-items: center; }
+      .nav-btn { background: rgba(255,255,255,.15); color: var(--white); border: 1px solid rgba(255,255,255,.35); padding: 9px 16px; font-size: .85rem; font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; text-decoration: none; white-space: nowrap; }
+      .nav-btn:hover { background: rgba(255,255,255,.25); }
+      .user-profile-badge { background: var(--white); color: var(--red); padding: 8px 14px; border-radius: var(--radius-sm); font-size: .85rem; font-weight: 700; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+      
+      main { max-width: 1200px; margin: 0 auto; padding: 32px 20px 48px; }
+
+      /* ─── HEADER & TABS ───────────────────────────── */
+      .page-header { display: flex; align-items: center; gap: 18px; margin-bottom: 24px; }
+      .page-header-badge { width: 56px; height: 56px; border-radius: var(--radius); background: var(--red); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+      .form-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--gray-800); }
+      .form-subtitle { font-size: .875rem; color: var(--gray-600); }
+      
+      .tab-container { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 2px solid var(--gray-200); padding-bottom: 10px; overflow-x: auto; white-space: nowrap; }
+      .tab-btn { text-decoration: none; background: transparent; border: none; padding: 10px 16px; font-size: .9rem; font-weight: 600; color: var(--gray-600); cursor: pointer; border-radius: var(--radius-sm); display: inline-flex; align-items: center; gap: 8px; transition: all var(--transition); }
+      .tab-btn:hover { background: var(--gray-100); color: var(--gray-800); }
+      .tab-btn.active { background: var(--red); color: var(--white); }
+
+      /* ─── REPORT LAYOUT (GRID) ────────────────────── */
+      .report-layout { display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; }
+      
+      /* ─── SIDEBAR BUILDER ─────────────────────────── */
+      .builder-sidebar { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 24px; position: sticky; top: 100px; max-height: calc(100vh - 120px); overflow-y: auto; }
+      .sidebar-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+      
+      .input-group { display: flex; flex-direction: column; margin-bottom: 16px; }
+      .input-group label { font-size: .8rem; font-weight: 600; color: var(--gray-600); margin-bottom: 6px; }
+      .input-group select, .input-group input { padding: 10px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); font-size: .85rem; font-family: 'Inter', sans-serif; width: 100%; transition: border-color var(--transition); }
+      .input-group select:focus, .input-group input:focus { border-color: var(--red); outline: none; }
+      
+      .radio-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+      .radio-label { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: var(--gray-800); cursor: pointer; }
+      
+      .action-btn { background: var(--blue); color: var(--white); border: none; padding: 12px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; transition: background 0.2s; }
+      .action-btn:hover { background: #163c7a; }
+      .secondary-btn { background: var(--white); color: var(--gray-800); border: 1px solid var(--gray-300); padding: 10px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; transition: background 0.2s; }
+      .secondary-btn:hover { background: var(--gray-50); }
+
+      /* ─── MAIN CONTENT AREA ───────────────────────── */
+      .report-content { display: flex; flex-direction: column; gap: 20px; min-width: 0; /* Prevents flex blowout */ }
+      
+      /* Top Action Bar */
+      .action-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; background: var(--white); padding: 16px 24px; border: 1px solid var(--gray-200); border-radius: var(--radius); }
+      .view-toggles { display: flex; background: var(--gray-100); padding: 4px; border-radius: var(--radius-sm); }
+      .view-btn { background: transparent; border: none; padding: 6px 12px; border-radius: var(--radius-sm); font-size: .85rem; font-weight: 600; cursor: pointer; color: var(--gray-600); transition: all var(--transition); }
+      .view-btn.active { background: var(--white); color: var(--gray-800); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+      .export-tools { display: flex; flex-wrap: wrap; gap: 10px; }
+      .tool-btn { background: var(--white); border: 1px solid var(--gray-300); padding: 8px 14px; border-radius: var(--radius-sm); font-size: .8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background var(--transition); }
+      .tool-btn:hover { background: var(--gray-50); }
+
+      /* Stats Grid */
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+      .stat-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 20px; border-left: 4px solid var(--blue); }
+      .stat-card.red { border-left-color: var(--red); }
+      .stat-card.gold { border-left-color: var(--gold); }
+      .stat-title { font-size: .8rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+      .stat-value { font-size: 1.8rem; font-weight: 800; color: var(--gray-800); font-family: 'Plus Jakarta Sans', sans-serif; }
+
+      /* Chart Placeholder */
+      .chart-container { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 24px; height: 280px; display: flex; align-items: flex-end; justify-content: space-around; gap: 10px; position: relative; }
+      .chart-bar { width: 100%; max-width: 60px; background: var(--blue); border-radius: 4px 4px 0 0; opacity: 0.8; transition: opacity 0.2s, height 0.5s ease; cursor: pointer; display: flex; justify-content: center; color: white; font-size: .75rem; font-weight: bold; padding-top: 8px; }
+      .chart-bar:hover { opacity: 1; }
+      
+      /* Data Table */
+      .table-container { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); overflow: hidden; }
+      .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .activity-table { width: 100%; border-collapse: collapse; font-size: .85rem; text-align: left; min-width: 700px; }
+      .activity-table th { background: var(--gray-50); color: var(--gray-600); padding: 14px 20px; font-size: .75rem; border-bottom: 1px solid var(--gray-200); text-transform: uppercase; letter-spacing: .02em; white-space: nowrap; }
+      .activity-table td { padding: 14px 20px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+      .activity-table tbody tr:hover td { background: var(--gray-50); }
+      .status-badge { padding: 4px 10px; border-radius: 20px; font-size: .75rem; font-weight: 600; display: inline-block; white-space: nowrap; }
+      .status-badge.approved { background: #ECFDF5; color: #065F46; }
+      
+      /* ─── RESPONSIVE DESIGN (FIXES) ───────────────── */
+      @media (max-width: 992px) {
+         .report-layout { grid-template-columns: 1fr; }
+         .builder-sidebar { position: static; max-height: none; }
+      }
+      
+      @media (max-width: 600px) {
+         .nav-inner { justify-content: space-between; }
+         .nav-left { width: 100%; margin-bottom: 10px; }
+         .stats-grid { grid-template-columns: 1fr; }
+         .action-bar { flex-direction: column; align-items: stretch; }
+         .export-tools { justify-content: space-between; }
+         .tool-btn { flex: 1; justify-content: center; }
+      }
+   </style>
+</head>
+<body>
+   <nav>
+      <div class="nav-inner">
+         <div class="nav-left">
+            <img src="City_of_Taguig_seal.svg.png" alt="Taguig Seal" class="logo">
+            <div class="header-text">
+               <span class="gov-label">Republic of the Philippines</span>
+               <span class="city-label">City of Taguig</span>
+               <span class="office-label">Business Permits & Licensing Office</span>
+            </div>
+         </div>
+         <div class="nav-right">
+            <a href="ManualForm.html" class="nav-btn"><i class="fa-solid fa-plus"></i> New</a>
+            <div class="user-profile-badge"><i class="fa-solid fa-user-tie"></i> Admin</div>
+         </div>
+      </div>
+   </nav>
+
+   <main>
+      <div class="page-header">
+         <div class="page-header-badge"><i class="fa-solid fa-chart-pie"></i></div>
+         <div>
+            <h1 class="form-title">System Dashboard</h1>
+            <p class="form-subtitle">Manage applications, view reports, and configure system settings.</p>
+         </div>
+      </div>
+
+      <div class="tab-container">
+         <a href="reports.html" class="tab-btn active"><i class="fa-solid fa-chart-line"></i> Generated Reports</a>
+         <a href="settings.html" class="tab-btn"><i class="fa-solid fa-user-gear"></i> Account Settings</a>
+         <a href="release-notes.html" class="tab-btn"><i class="fa-solid fa-list-check"></i> Release Notes</a>
+      </div>
+
+      <!-- GRID LAYOUT START -->
+      <div class="report-layout">
+         
+         <!-- LEFT: REPORT BUILDER SIDEBAR -->
+         <aside class="builder-sidebar">
+            <div class="sidebar-title">
+               Report Builder <i class="fa-solid fa-sliders" style="color: var(--gray-400);"></i>
+            </div>
+            
+            <div class="input-group">
+               <label>Date Range Preset</label>
+               <select>
+                  <option>Year to Date (2026)</option>
+                  <option>This Month (June)</option>
+                  <option>Last Quarter</option>
+                  <option>Custom Range...</option>
+               </select>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+               <div class="input-group" style="flex:1;"><label>From</label><input type="date" value="2026-01-01"></div>
+               <div class="input-group" style="flex:1;"><label>To</label><input type="date" value="2026-06-19"></div>
+            </div>
+
+            <div class="input-group">
+               <label>Location (Barangay)</label>
+               <select>
+                  <option>All Barangays</option>
+                  <option selected>Pinagsama</option>
+                  <option>Fort Bonifacio</option>
+                  <option>Ususan</option>
+                  <option>Wawa</option>
+               </select>
+            </div>
+
+            <div class="input-group">
+               <label>Application Status</label>
+               <select>
+                  <option>All Statuses</option>
+                  <option>Approved</option>
+                  <option>Pending Assessment</option>
+                  <option>Action Required</option>
+               </select>
+            </div>
+
+            <label style="font-size: .8rem; font-weight: 600; color: var(--gray-600); display: block; margin-bottom: 8px; margin-top: 8px;">Group Data By (Pivot)</label>
+            <div class="radio-group">
+               <label class="radio-label"><input type="radio" name="groupBy" checked> None (Raw List)</label>
+               <label class="radio-label"><input type="radio" name="groupBy"> Barangay</label>
+               <label class="radio-label"><input type="radio" name="groupBy"> Business Type</label>
+            </div>
+
+            <button class="action-btn"><i class="fa-solid fa-play"></i> Generate Data</button>
+            <button class="secondary-btn"><i class="fa-regular fa-bookmark"></i> Save as Template</button>
+         </aside>
+
+         <!-- RIGHT: MAIN REPORT CONTENT -->
+         <section class="report-content">
+            
+            <!-- Tool Bar -->
+            <div class="action-bar">
+               <div class="view-toggles">
+                  <button class="view-btn"><i class="fa-solid fa-chart-column"></i> Chart</button>
+                  <button class="view-btn active"><i class="fa-solid fa-table-list"></i> Table</button>
+               </div>
+               <div class="export-tools">
+                  <button class="tool-btn"><i class="fa-regular fa-clock"></i> Schedule</button>
+                  <span style="border-left: 1px solid var(--gray-200); margin: 0 2px; display: inline-block;"></span>
+                  <button class="tool-btn"><i class="fa-solid fa-file-pdf" style="color: var(--red);"></i> PDF</button>
+                  <button class="tool-btn"><i class="fa-solid fa-file-csv" style="color: var(--green);"></i> CSV</button>
+               </div>
+            </div>
+
+            <!-- Summary KPIs -->
+            <div class="stats-grid">
+               <div class="stat-card">
+                  <p class="stat-title">Total Applications</p>
+                  <h3 class="stat-value">342</h3>
+               </div>
+               <div class="stat-card gold">
+                  <p class="stat-title">Avg. Processing Time</p>
+                  <h3 class="stat-value">3.2 Days</h3>
+               </div>
+               <div class="stat-card red">
+                  <p class="stat-title">Total Fees Assessed</p>
+                  <h3 class="stat-value">₱ 1.4M</h3>
+               </div>
+            </div>
+
+            <!-- Visual Chart Placeholder -->
+            <div class="chart-container">
+               <div style="position: absolute; top: 15px; left: 20px; font-size: .9rem; font-weight: 600; color: var(--gray-600);">Applications by Month (Pinagsama)</div>
+               <div class="chart-bar" style="height: 30%;">Jan</div>
+               <div class="chart-bar" style="height: 45%;">Feb</div>
+               <div class="chart-bar" style="height: 60%;">Mar</div>
+               <div class="chart-bar" style="height: 40%;">Apr</div>
+               <div class="chart-bar" style="height: 85%;">May</div>
+               <div class="chart-bar" style="height: 20%; background: var(--gray-300); color: var(--gray-600);">Jun</div>
+            </div>
+
+            <!-- Data Table (Now Responsive) -->
+            <div class="table-container">
+               <div class="table-responsive">
+                  <table class="activity-table">
+                     <thead>
+                        <tr>
+                           <th>LCN</th>
+                           <th>Business Name</th>
+                           <th>Barangay</th>
+                           <th>Date Submitted</th>
+                           <th>Revenue Assessed</th>
+                           <th>Status</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td>TAG-26-089</td>
+                           <td><strong>TechFlow Data Solutions</strong><br><span style="font-size:.75rem; color:var(--gray-400);">IT Services</span></td>
+                           <td>Pinagsama</td>
+                           <td>06/15/2026</td>
+                           <td>₱ 14,500.00</td>
+                           <td><span class="status-badge approved">Approved</span></td>
+                        </tr>
+                        <tr>
+                           <td>TAG-26-042</td>
+                           <td><strong>Pinagsama Hardware</strong><br><span style="font-size:.75rem; color:var(--gray-400);">Retail</span></td>
+                           <td>Pinagsama</td>
+                           <td>06/10/2026</td>
+                           <td>₱ 8,250.00</td>
+                           <td><span class="status-badge approved">Approved</span></td>
+                        </tr>
+                        <tr>
+                           <td>TAG-26-015</td>
+                           <td><strong>ZMB Cloud Hosting</strong><br><span style="font-size:.75rem; color:var(--gray-400);">IT Services</span></td>
+                           <td>Pinagsama</td>
+                           <td>05/28/2026</td>
+                           <td>₱ 22,000.00</td>
+                           <td><span class="status-badge approved">Approved</span></td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <div style="padding: 12px 20px; font-size: .8rem; color: var(--gray-600); border-top: 1px solid var(--gray-100); text-align: center;">
+                  Showing 3 of 342 records. <a href="#" style="color: var(--blue); text-decoration: none; font-weight: 600;">Load more...</a>
+               </div>
+            </div>
+
+         </section>
+      </div>
+   </main>
+</body>
+</html>

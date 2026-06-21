@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+   <title>Account Settings - Unified Business Permit System</title>
+   <style>
+      /* ─── RESET & ROOT ────────────────────────── */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+         --red: #EF3340; --red-dark: #c9222e; --blue: #1E4E9E; --gold: #FDB913; --green: #10B981;
+         --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-300: #d1d5db; --gray-400: #9ca3af;
+         --gray-600: #4b5563; --gray-800: #1f2937; --white: #ffffff;
+         --radius: 8px; --radius-sm: 4px; --transition: .2s ease;
+      }
+      body { font-family: 'Inter', Arial, sans-serif; background-color: #f4f5f7; color: var(--gray-800); line-height: 1.6; min-height: 100vh; }
+      
+      /* ─── NAV & LAYOUT ────────────────────────── */
+      nav { position: sticky; top: 0; z-index: 100; background: var(--red); border-bottom: 1px solid var(--red-dark); }
+      .nav-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; padding: 12px 24px; gap: 16px; }
+      .nav-left { display: flex; align-items: center; gap: 14px; flex: 1; }
+      .logo { width: 56px; height: 56px; object-fit: contain; }
+      .header-text { display: flex; flex-direction: column; gap: 1px; }
+      .gov-label { font-size: .7rem; font-weight: 600; color: rgba(255,255,255,.75); text-transform: uppercase; }
+      .city-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--white); }
+      .office-label { font-size: .75rem; color: rgba(255,255,255,.8); font-weight: 400; }
+      .nav-right { display: flex; gap: 12px; align-items: center; }
+      .nav-btn { background: rgba(255,255,255,.15); color: var(--white); border: 1px solid rgba(255,255,255,.35); padding: 9px 20px; font-size: .85rem; font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; }
+      .user-profile-badge { background: var(--white); color: var(--red); padding: 8px 14px; border-radius: var(--radius-sm); font-size: .85rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+      main { max-width: 1080px; margin: 0 auto; padding: 32px 20px 48px; }
+
+      /* ─── HEADER & TABS ───────────────────────────── */
+      .page-header { display: flex; align-items: center; gap: 18px; margin-bottom: 28px; }
+      .page-header-badge { width: 56px; height: 56px; border-radius: var(--radius); background: var(--red); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+      .form-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--gray-800); }
+      .form-subtitle { font-size: .875rem; color: var(--gray-600); }
+      .tab-container { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 2px solid var(--gray-200); padding-bottom: 10px; }
+      .tab-btn { text-decoration: none; background: transparent; border: none; padding: 10px 16px; font-size: .9rem; font-weight: 600; color: var(--gray-600); cursor: pointer; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 8px; transition: all var(--transition); }
+      .tab-btn:hover { background: var(--gray-100); color: var(--gray-800); }
+      .tab-btn.active { background: var(--red); color: var(--white); }
+
+      /* ─── SECTIONS & FORMS ────────────────────── */
+      .form-section { background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-200); margin-bottom: 20px; overflow: hidden; }
+      .section-header { display: flex; align-items: center; gap: 14px; padding: 20px 28px; border-bottom: 1px solid var(--gray-100); background: var(--gray-50); }
+      .section-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--red); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: .95rem; }
+      .section-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; font-weight: 700; color: var(--gray-800); }
+      .section-desc { font-size: .78rem; color: var(--gray-400); }
+      .section-body { padding: 24px 28px; }
+      .form-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+      .two-col > .col { flex: 1 1 calc(50% - 7px); min-width: 250px; }
+      .top-gap { margin-top: 18px; }
+      .divider { border: none; border-top: 1px solid var(--gray-200); margin: 20px 0; }
+      .input-group { display: flex; flex-direction: column; margin-bottom: 14px; }
+      .input-group label { font-size: .78rem; font-weight: 600; color: var(--gray-600); margin-bottom: 6px; }
+      .input-group input { padding: 10px 13px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); font-size: .9rem; font-family: 'Inter', sans-serif; }
+      .input-group input:focus { border-color: var(--red); outline: none; }
+      .action-btn { background: var(--gray-800); color: var(--white); border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background var(--transition); display: inline-flex; align-items: center; gap: 8px; }
+      .action-btn:hover { background: #000; }
+
+      /* ─── SETTINGS AVATAR ───────────────────────────────────────── */
+      .avatar-upload { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+      .avatar-circle { width: 64px; height: 64px; border-radius: 50%; background: var(--gray-200); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--gray-400); }
+      .upload-btn { background: var(--white); border: 1px solid var(--gray-300); padding: 6px 12px; border-radius: var(--radius-sm); font-size: .8rem; font-weight: 600; cursor: pointer; }
+   </style>
+</head>
+<body>
+   <nav>
+      <div class="nav-inner">
+         <div class="nav-left">
+            <img src="City_of_Taguig_seal.svg.png" alt="Taguig Seal" class="logo">
+            <div class="header-text">
+               <span class="gov-label">Republic of the Philippines</span>
+               <span class="city-label">City of Taguig</span>
+               <span class="office-label">Business Permits & Licensing Office</span>
+            </div>
+         </div>
+         <div class="nav-right">
+            <a href="ManualForm.html" style="text-decoration: none;">
+               <button class="nav-btn"><i class="fa-solid fa-plus"></i> New Application</button>
+            </a>
+            <div class="user-profile-badge"><i class="fa-solid fa-user-tie"></i> Admin</div>
+         </div>
+      </div>
+   </nav>
+   <main>
+      <div class="page-header">
+         <div class="page-header-badge"><i class="fa-solid fa-user-gear"></i></div>
+         <div>
+            <h1 class="form-title">Account Settings</h1>
+            <p class="form-subtitle">Manage your personal profile and security preferences.</p>
+         </div>
+      </div>
+      <div class="tab-container">
+         <a href="reports.html" class="tab-btn"><i class="fa-solid fa-chart-line"></i> Generated Reports</a>
+         <a href="settings.html" class="tab-btn active"><i class="fa-solid fa-user-gear"></i> Account Settings</a>
+         <a href="release-notes.html" class="tab-btn"><i class="fa-solid fa-list-check"></i> Release Notes</a>
+      </div>
+      <section class="form-container">
+         <div class="form-row two-col">
+            <div class="col">
+               <div class="form-section" style="height: 100%;">
+                  <div class="section-header">
+                     <span class="section-icon"><i class="fa-solid fa-id-badge"></i></span>
+                     <div>
+                        <h2 class="section-title">Profile Information</h2>
+                        <p class="section-desc">Update your personal details.</p>
+                     </div>
+                  </div>
+                  <div class="section-body">
+                     <div class="avatar-upload">
+                        <div class="avatar-circle"><i class="fa-solid fa-user"></i></div>
+                        <button class="upload-btn">Upload Photo</button>
+                     </div>
+                     <div class="input-group top-gap">
+                        <label>Full Name</label>
+                        <input type="text" value="System Administrator">
+                     </div>
+                     <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" value="admin@taguig.gov.ph">
+                     </div>
+                     <button class="action-btn top-gap">Save Profile</button>
+                  </div>
+               </div>
+            </div>
+            <div class="col">
+               <div class="form-section" style="height: 100%;">
+                  <div class="section-header">
+                     <span class="section-icon"><i class="fa-solid fa-shield-halved"></i></span>
+                     <div>
+                        <h2 class="section-title">Security & Access</h2>
+                        <p class="section-desc">Manage passwords and permissions.</p>
+                     </div>
+                  </div>
+                  <div class="section-body">
+                     <div class="input-group">
+                        <label>Current Role</label>
+                        <input type="text" value="Super Admin" disabled>
+                     </div>
+                     <div class="divider"></div>
+                     <div class="input-group">
+                        <label>Current Password</label>
+                        <input type="password" placeholder="••••••••">
+                     </div>
+                     <div class="input-group">
+                        <label>New Password</label>
+                        <input type="password" placeholder="Leave blank to keep current">
+                     </div>
+                     <div class="input-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" placeholder="">
+                     </div>
+                     <button class="action-btn top-gap">Update Password</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+   </main>
+</body>
+</html>

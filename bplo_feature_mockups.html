@@ -1,0 +1,376 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)}
+.nav{display:flex;gap:4px;flex-wrap:wrap;padding:12px 0 0;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:0}
+.nav button{padding:7px 13px;border:none;background:none;font-size:12px;color:var(--color-text-secondary);cursor:pointer;border-radius:var(--border-radius-md) var(--border-radius-md) 0 0;border-bottom:2px solid transparent;transition:color .15s}
+.nav button.active{color:var(--color-text-primary);font-weight:500;border-bottom:2px solid #378ADD}
+.nav button:hover:not(.active){background:var(--color-background-secondary)}
+.screen{display:none;padding:16px 0}
+.screen.active{display:block}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px}
+.card+.card{margin-top:12px}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px}
+.metric .val{font-size:22px;font-weight:500;margin-top:4px}
+.metric .lbl{font-size:12px;color:var(--color-text-secondary)}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.badge-success{background:var(--color-background-success);color:var(--color-text-success)}
+.badge-info{background:var(--color-background-info);color:var(--color-text-info)}
+.badge-danger{background:var(--color-background-danger);color:var(--color-text-danger)}
+.badge-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.row-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.row-item:last-child{border-bottom:none}
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:1px;background:var(--color-border-tertiary)}
+.tl-item{position:relative;margin-bottom:14px}
+.tl-dot{position:absolute;left:-22px;top:3px;width:10px;height:10px;border-radius:50%;background:#378ADD;border:2px solid var(--color-background-primary)}
+.tl-dot.done{background:#639922}
+.tl-dot.pending{background:#EF9F27}
+.tl-dot.gray{background:var(--color-border-secondary)}
+.tl-label{font-size:13px;font-weight:500}
+.tl-meta{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.field-row{margin-bottom:12px}
+.field-row label{font-size:12px;color:var(--color-text-secondary);display:block;margin-bottom:4px}
+.fake-input{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:7px 10px;font-size:13px;color:var(--color-text-primary)}
+.fake-input.disabled{color:var(--color-text-tertiary)}
+.check-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.check-item:last-child{border-bottom:none}
+.check-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.check-icon.ok{background:var(--color-background-success)}
+.check-icon.miss{background:var(--color-background-secondary)}
+.check-icon.err{background:var(--color-background-danger)}
+.role-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px}
+.role-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;margin-right:4px}
+.log-row{display:flex;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.log-row:last-child{border-bottom:none}
+.log-time{color:var(--color-text-secondary);min-width:72px}
+.log-action{color:var(--color-text-primary)}
+.log-who{color:var(--color-text-secondary)}
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:7px 10px;margin-bottom:12px}
+.search-bar i{color:var(--color-text-secondary)}
+.search-bar span{font-size:13px;color:var(--color-text-tertiary)}
+.filter-chip{display:inline-flex;align-items:center;gap:5px;border:0.5px solid var(--color-border-secondary);border-radius:20px;padding:3px 10px;font-size:12px;color:var(--color-text-secondary);margin-right:6px;margin-bottom:8px}
+.fee-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
+.fee-row:last-child{border-bottom:none}
+.fee-total{display:flex;justify-content:space-between;padding:10px 0;font-weight:500;font-size:14px}
+.notif-item{display:flex;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.notif-item:last-child{border-bottom:none}
+.notif-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.progress-bar{height:6px;background:var(--color-background-secondary);border-radius:3px;margin-top:6px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:7px 10px;color:var(--color-text-secondary);font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)}
+td{padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary)}
+tr:last-child td{border-bottom:none}
+.page-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.page-hdr h2{font-size:16px;font-weight:500}
+.btn-primary{background:#378ADD;color:#fff;border:none;border-radius:var(--border-radius-md);padding:7px 14px;font-size:12px;cursor:pointer}
+.btn-ghost{background:none;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:7px 14px;font-size:12px;color:var(--color-text-primary);cursor:pointer}
+.dupli-alert{background:var(--color-background-danger);border:0.5px solid var(--color-border-danger);border-radius:var(--border-radius-md);padding:10px 14px;display:flex;align-items:flex-start;gap:10px;margin-top:10px}
+.pdf-preview{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--color-text-secondary);font-size:12px}
+</style>
+
+<h2 class="sr-only">BPLO system feature mockups — navigate tabs to view each screen</h2>
+
+<nav class="nav" id="nav">
+  <button class="active" onclick="show(0)"><i class="ti ti-git-branch" aria-hidden="true"></i> Status tracking</button>
+  <button onclick="show(1)"><i class="ti ti-bell" aria-hidden="true"></i> Notifications</button>
+  <button onclick="show(2)"><i class="ti ti-checklist" aria-hidden="true"></i> Doc checklist</button>
+  <button onclick="show(3)"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Duplicate detect</button>
+  <button onclick="show(4)"><i class="ti ti-file-invoice" aria-hidden="true"></i> Fee computation</button>
+  <button onclick="show(5)"><i class="ti ti-chart-bar" aria-hidden="true"></i> Dashboard</button>
+  <button onclick="show(6)"><i class="ti ti-users" aria-hidden="true"></i> User roles</button>
+  <button onclick="show(7)"><i class="ti ti-history" aria-hidden="true"></i> Audit log</button>
+  <button onclick="show(8)"><i class="ti ti-search" aria-hidden="true"></i> Search & filter</button>
+  <button onclick="show(9)"><i class="ti ti-file-download" aria-hidden="true"></i> Permit PDF</button>
+</nav>
+
+<!-- 0: STATUS TRACKING -->
+<div class="screen active" id="s0">
+  <div class="page-hdr"><h2>Application status</h2><span class="badge badge-info">APP-2025-0041</span></div>
+  <div class="card">
+    <div class="section-label">Progress</div>
+    <div class="progress-bar" style="margin-bottom:16px"><div class="progress-fill" style="width:65%;background:#378ADD"></div></div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot done"></div><div class="tl-label">Application submitted</div><div class="tl-meta">Jun 10, 2025 · 9:14 AM — by Maria Santos</div></div>
+      <div class="tl-item"><div class="tl-dot done"></div><div class="tl-label">Documents verified</div><div class="tl-meta">Jun 11, 2025 · 2:30 PM — by Processor Cruz</div></div>
+      <div class="tl-item"><div class="tl-dot pending"></div><div class="tl-label">Under review</div><div class="tl-meta">Started Jun 12 · est. completion Jun 15</div></div>
+      <div class="tl-item"><div class="tl-dot gray"></div><div class="tl-label">For approval</div><div class="tl-meta">Pending</div></div>
+      <div class="tl-item" style="margin-bottom:0"><div class="tl-dot gray"></div><div class="tl-label">Permit released</div><div class="tl-meta">Pending</div></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="section-label">Application info</div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:13px">Business name</span><span style="font-size:13px">Santos General Merchandise</span></div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:13px">Type</span><span class="badge badge-info">New application</span></div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:13px">Status</span><span class="badge badge-warn">Under review</span></div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:13px">Assigned to</span><span style="font-size:13px">Processor Cruz</span></div>
+  </div>
+</div>
+
+<!-- 1: NOTIFICATIONS -->
+<div class="screen" id="s1">
+  <div class="page-hdr"><h2>Notifications</h2><button class="btn-ghost" style="font-size:11px">Mark all read</button></div>
+  <div class="card">
+    <div class="notif-item">
+      <div class="notif-icon" style="background:var(--color-background-warning)"><i class="ti ti-clock" style="font-size:16px;color:var(--color-text-warning)" aria-hidden="true"></i></div>
+      <div><div style="font-size:13px;font-weight:500">Renewal reminder — Santos Gen. Merchandise</div><div style="font-size:12px;color:var(--color-text-secondary);margin-top:2px">Permit expires in 30 days (Jul 21, 2025). Renew now to avoid penalties.</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px">Jun 21 · 8:00 AM</div></div>
+    </div>
+    <div class="notif-item">
+      <div class="notif-icon" style="background:var(--color-background-success)"><i class="ti ti-check" style="font-size:16px;color:var(--color-text-success)" aria-hidden="true"></i></div>
+      <div><div style="font-size:13px;font-weight:500">Application approved — Dela Cruz Hardware</div><div style="font-size:12px;color:var(--color-text-secondary);margin-top:2px">Your permit is ready for release. Please proceed to window 3.</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px">Jun 20 · 3:15 PM</div></div>
+    </div>
+    <div class="notif-item">
+      <div class="notif-icon" style="background:var(--color-background-info)"><i class="ti ti-message" style="font-size:16px;color:var(--color-text-info)" aria-hidden="true"></i></div>
+      <div><div style="font-size:13px;font-weight:500">Document required — Reyes Food Cart</div><div style="font-size:12px;color:var(--color-text-secondary);margin-top:2px">Missing: Sanitary permit. Please submit within 5 business days.</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px">Jun 19 · 10:00 AM</div></div>
+    </div>
+    <div class="notif-item">
+      <div class="notif-icon" style="background:var(--color-background-danger)"><i class="ti ti-alert-circle" style="font-size:16px;color:var(--color-text-danger)" aria-hidden="true"></i></div>
+      <div><div style="font-size:13px;font-weight:500">Renewal overdue — Garcia Auto Repair</div><div style="font-size:12px;color:var(--color-text-secondary);margin-top:2px">Permit expired Jun 1. A penalty of ₱500 applies upon renewal.</div><div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px">Jun 15 · 9:00 AM</div></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="section-label">Notification settings</div>
+    <div class="row-item"><span style="font-size:13px">Email notifications</span><span style="font-size:12px;color:var(--color-text-success)"><i class="ti ti-check" aria-hidden="true"></i> On</span></div>
+    <div class="row-item"><span style="font-size:13px">SMS alerts</span><span style="font-size:12px;color:var(--color-text-secondary)">Off</span></div>
+    <div class="row-item"><span style="font-size:13px">Renewal reminder — days before</span><span style="font-size:12px">30 / 14 / 7 days</span></div>
+  </div>
+</div>
+
+<!-- 2: DOC CHECKLIST -->
+<div class="screen" id="s2">
+  <div class="page-hdr"><h2>Document checklist</h2><span class="badge badge-warn">3 of 6 submitted</span></div>
+  <div class="card">
+    <div class="section-label">Required documents</div>
+    <div class="check-item"><div class="check-icon ok"><i class="ti ti-check" style="color:var(--color-text-success);font-size:11px" aria-hidden="true"></i></div><div><div style="font-size:13px">Barangay clearance</div><div style="font-size:11px;color:var(--color-text-secondary)">Uploaded Jun 10 · barangay_clearance.pdf</div></div><span class="badge badge-success">Verified</span></div>
+    <div class="check-item"><div class="check-icon ok"><i class="ti ti-check" style="color:var(--color-text-success);font-size:11px" aria-hidden="true"></i></div><div><div style="font-size:13px">DTI / SEC registration</div><div style="font-size:11px;color:var(--color-text-secondary)">Uploaded Jun 10 · dti_cert.pdf</div></div><span class="badge badge-success">Verified</span></div>
+    <div class="check-item"><div class="check-icon ok"><i class="ti ti-check" style="color:var(--color-text-success);font-size:11px" aria-hidden="true"></i></div><div><div style="font-size:13px">Lease contract / land title</div><div style="font-size:11px;color:var(--color-text-secondary)">Uploaded Jun 11 · lease.pdf</div></div><span class="badge badge-warn">Pending review</span></div>
+    <div class="check-item"><div class="check-icon err"><i class="ti ti-x" style="color:var(--color-text-danger);font-size:11px" aria-hidden="true"></i></div><div><div style="font-size:13px">Sanitary permit</div><div style="font-size:11px;color:var(--color-text-danger)">Not yet submitted</div></div><button class="btn-primary" style="font-size:11px;padding:4px 10px">Upload</button></div>
+    <div class="check-item"><div class="check-icon miss"></div><div><div style="font-size:13px">Fire safety inspection cert.</div><div style="font-size:11px;color:var(--color-text-secondary)">Not yet submitted</div></div><button class="btn-ghost" style="font-size:11px;padding:4px 10px">Upload</button></div>
+    <div class="check-item"><div class="check-icon miss"></div><div><div style="font-size:13px">Zoning clearance</div><div style="font-size:11px;color:var(--color-text-secondary)">Not yet submitted</div></div><button class="btn-ghost" style="font-size:11px;padding:4px 10px">Upload</button></div>
+  </div>
+</div>
+
+<!-- 3: DUPLICATE DETECT -->
+<div class="screen" id="s3">
+  <div class="page-hdr"><h2>Duplicate detection</h2></div>
+  <div class="card">
+    <div class="section-label">New application entry</div>
+    <div class="grid2">
+      <div class="field-row"><label>Business name</label><div class="fake-input">Santos General Merchandise</div></div>
+      <div class="field-row"><label>TIN</label><div class="fake-input">123-456-789-000</div></div>
+    </div>
+    <div class="field-row"><label>Owner</label><div class="fake-input">Maria L. Santos</div></div>
+    <div class="dupli-alert">
+      <i class="ti ti-alert-triangle" style="color:var(--color-text-danger);font-size:18px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i>
+      <div>
+        <div style="font-size:13px;font-weight:500;color:var(--color-text-danger)">Potential duplicate found</div>
+        <div style="font-size:12px;color:var(--color-text-danger);margin-top:3px">An existing record matches this TIN. Please verify before proceeding.</div>
+        <div style="margin-top:10px;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:10px">
+          <div style="font-size:12px;font-weight:500">Santos Gen. Merchandise</div>
+          <div style="font-size:11px;color:var(--color-text-secondary);margin-top:3px">TIN: 123-456-789-000 · APP-2024-0118 · <span class="badge badge-success" style="font-size:10px">Active</span></div>
+          <div style="display:flex;gap:6px;margin-top:10px"><button class="btn-ghost" style="font-size:11px;padding:4px 10px">View existing</button><button class="btn-primary" style="font-size:11px;padding:4px 10px">Override & continue</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="section-label">Match confidence</div>
+    <div class="row-item"><span style="font-size:12px;color:var(--color-text-secondary)">TIN match</span><div style="display:flex;align-items:center;gap:8px;flex:1;max-width:200px;margin-left:auto"><div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:100%;background:#E24B4A"></div></div><span style="font-size:11px;min-width:30px;text-align:right">100%</span></div></div>
+    <div class="row-item"><span style="font-size:12px;color:var(--color-text-secondary)">Business name</span><div style="display:flex;align-items:center;gap:8px;flex:1;max-width:200px;margin-left:auto"><div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:92%;background:#EF9F27"></div></div><span style="font-size:11px;min-width:30px;text-align:right">92%</span></div></div>
+    <div class="row-item"><span style="font-size:12px;color:var(--color-text-secondary)">Owner name</span><div style="display:flex;align-items:center;gap:8px;flex:1;max-width:200px;margin-left:auto"><div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:88%;background:#63992299"></div></div><span style="font-size:11px;min-width:30px;text-align:right">88%</span></div></div>
+  </div>
+</div>
+
+<!-- 4: FEE COMPUTATION -->
+<div class="screen" id="s4">
+  <div class="page-hdr"><h2>Fee computation</h2><span class="badge badge-gray">Draft</span></div>
+  <div class="card">
+    <div class="section-label">Business details</div>
+    <div class="grid2">
+      <div class="field-row"><label>Capitalization (₱)</label><div class="fake-input">500,000.00</div></div>
+      <div class="field-row"><label>LOB type</label><div class="fake-input">Retail — General merchandise</div></div>
+    </div>
+    <div class="field-row"><label>PSIC code</label><div class="fake-input">47190</div></div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="section-label">Fee breakdown</div>
+    <div class="fee-row"><span>Business tax (1% of capitalization)</span><span>₱5,000.00</span></div>
+    <div class="fee-row"><span>Mayor's permit fee</span><span>₱1,200.00</span></div>
+    <div class="fee-row"><span>Sanitary inspection fee</span><span>₱300.00</span></div>
+    <div class="fee-row"><span>Garbage fee</span><span>₱200.00</span></div>
+    <div class="fee-row"><span>Signboard fee</span><span>₱150.00</span></div>
+    <div class="fee-row"><span>BFP clearance fee</span><span>₱500.00</span></div>
+    <div style="border-top:0.5px solid var(--color-border-primary);margin-top:4px"></div>
+    <div class="fee-total"><span>Total amount due</span><span style="color:#378ADD">₱7,350.00</span></div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="section-label">Payment record</div>
+    <div class="grid2">
+      <div class="field-row"><label>OR number</label><div class="fake-input disabled">Not yet paid</div></div>
+      <div class="field-row"><label>Payment date</label><div class="fake-input disabled">—</div></div>
+    </div>
+    <button class="btn-primary" style="width:100%;text-align:center">Record payment</button>
+  </div>
+</div>
+
+<!-- 5: DASHBOARD -->
+<div class="screen" id="s5">
+  <div class="page-hdr"><h2>Dashboard</h2><span style="font-size:12px;color:var(--color-text-secondary)">June 2025</span></div>
+  <div class="grid4" style="margin-bottom:12px">
+    <div class="metric"><div class="lbl">Total applications</div><div class="val">248</div></div>
+    <div class="metric"><div class="lbl">Pending review</div><div class="val" style="color:var(--color-text-warning)">34</div></div>
+    <div class="metric"><div class="lbl">Approved</div><div class="val" style="color:var(--color-text-success)">189</div></div>
+    <div class="metric"><div class="lbl">Rejected</div><div class="val" style="color:var(--color-text-danger)">12</div></div>
+  </div>
+  <div class="card">
+    <div class="section-label">Applications by barangay</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>Western Bicutan</span><span>58</span></div><div class="progress-bar"><div class="progress-fill" style="width:78%;background:#378ADD"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>Fort Bonifacio</span><span>44</span></div><div class="progress-bar"><div class="progress-fill" style="width:60%;background:#378ADD"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>Ususan</span><span>37</span></div><div class="progress-bar"><div class="progress-fill" style="width:50%;background:#378ADD"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>Pinagsama</span><span>29</span></div><div class="progress-bar"><div class="progress-fill" style="width:39%;background:#378ADD"></div></div></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="section-label">Recent activity</div>
+    <div class="row-item"><div><div style="font-size:12px;font-weight:500">Dela Cruz Hardware — Approved</div><div style="font-size:11px;color:var(--color-text-secondary)">Jun 21 · 9:00 AM</div></div><span class="badge badge-success">Approved</span></div>
+    <div class="row-item"><div><div style="font-size:12px;font-weight:500">Reyes Food Cart — Under review</div><div style="font-size:11px;color:var(--color-text-secondary)">Jun 21 · 8:45 AM</div></div><span class="badge badge-warn">Review</span></div>
+    <div class="row-item"><div><div style="font-size:12px;font-weight:500">Garcia Auto Repair — Rejected</div><div style="font-size:11px;color:var(--color-text-secondary)">Jun 20 · 4:00 PM</div></div><span class="badge badge-danger">Rejected</span></div>
+  </div>
+</div>
+
+<!-- 6: USER ROLES -->
+<div class="screen" id="s6">
+  <div class="page-hdr"><h2>User management</h2><button class="btn-primary" style="font-size:11px">+ Add user</button></div>
+  <div class="card">
+    <div class="section-label">Roles</div>
+    <div class="grid3">
+      <div class="role-card">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px">Admin</div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">Full access to all modules</div>
+        <div><span class="role-tag" style="background:var(--color-background-info);color:var(--color-text-info)">CRUD</span><span class="role-tag" style="background:var(--color-background-danger);color:var(--color-text-danger)">Delete</span><span class="role-tag" style="background:var(--color-background-warning);color:var(--color-text-warning)">Reports</span></div>
+      </div>
+      <div class="role-card">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px">Processor</div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">Review & update applications</div>
+        <div><span class="role-tag" style="background:var(--color-background-info);color:var(--color-text-info)">Read</span><span class="role-tag" style="background:var(--color-background-success);color:var(--color-text-success)">Update status</span></div>
+      </div>
+      <div class="role-card">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px">Viewer</div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">Read-only access</div>
+        <div><span class="role-tag" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">Read only</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="section-label">Users</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Last login</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Juan dela Cruz</td><td style="color:var(--color-text-secondary)">jdelacruz@taguig.gov.ph</td><td><span class="badge badge-danger">Admin</span></td><td style="color:var(--color-text-secondary)">Jun 21</td><td><i class="ti ti-edit" style="color:var(--color-text-secondary)" aria-hidden="true"></i></td></tr>
+          <tr><td>Ana Cruz</td><td style="color:var(--color-text-secondary)">acruz@taguig.gov.ph</td><td><span class="badge badge-info">Processor</span></td><td style="color:var(--color-text-secondary)">Jun 21</td><td><i class="ti ti-edit" style="color:var(--color-text-secondary)" aria-hidden="true"></i></td></tr>
+          <tr><td>Ben Reyes</td><td style="color:var(--color-text-secondary)">breyes@taguig.gov.ph</td><td><span class="badge badge-info">Processor</span></td><td style="color:var(--color-text-secondary)">Jun 20</td><td><i class="ti ti-edit" style="color:var(--color-text-secondary)" aria-hidden="true"></i></td></tr>
+          <tr><td>Clara Go</td><td style="color:var(--color-text-secondary)">cgo@taguig.gov.ph</td><td><span class="badge badge-gray">Viewer</span></td><td style="color:var(--color-text-secondary)">Jun 18</td><td><i class="ti ti-edit" style="color:var(--color-text-secondary)" aria-hidden="true"></i></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 7: AUDIT LOG -->
+<div class="screen" id="s7">
+  <div class="page-hdr"><h2>Audit log</h2><button class="btn-ghost" style="font-size:11px"><i class="ti ti-download" aria-hidden="true"></i> Export</button></div>
+  <div class="card">
+    <div class="section-label">Filters</div>
+    <div style="margin-bottom:8px">
+      <span class="filter-chip"><i class="ti ti-calendar" aria-hidden="true"></i> Jun 2025</span>
+      <span class="filter-chip">All users</span>
+      <span class="filter-chip">All actions</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Record</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--color-text-secondary)">Jun 21 09:12</td><td>J. dela Cruz</td><td><span class="badge badge-success" style="font-size:10px">Approved</span></td><td>APP-2025-0039</td><td style="color:var(--color-text-secondary)">Status → Approved</td></tr>
+          <tr><td style="color:var(--color-text-secondary)">Jun 21 08:55</td><td>A. Cruz</td><td><span class="badge badge-info" style="font-size:10px">Updated</span></td><td>APP-2025-0041</td><td style="color:var(--color-text-secondary)">Status → Under review</td></tr>
+          <tr><td style="color:var(--color-text-secondary)">Jun 20 15:40</td><td>J. dela Cruz</td><td><span class="badge badge-danger" style="font-size:10px">Rejected</span></td><td>APP-2025-0037</td><td style="color:var(--color-text-secondary)">Missing docs — sanitary permit</td></tr>
+          <tr><td style="color:var(--color-text-secondary)">Jun 20 14:10</td><td>B. Reyes</td><td><span class="badge badge-gray" style="font-size:10px">Created</span></td><td>APP-2025-0042</td><td style="color:var(--color-text-secondary)">New application</td></tr>
+          <tr><td style="color:var(--color-text-secondary)">Jun 20 11:00</td><td>A. Cruz</td><td><span class="badge badge-warn" style="font-size:10px">Edited</span></td><td>APP-2025-0036</td><td style="color:var(--color-text-secondary)">Capitalization updated</td></tr>
+          <tr><td style="color:var(--color-text-secondary)">Jun 19 09:30</td><td>J. dela Cruz</td><td><span class="badge badge-danger" style="font-size:10px">Deleted</span></td><td>APP-2025-0033</td><td style="color:var(--color-text-secondary)">Duplicate — merged to 0031</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 8: SEARCH & FILTER -->
+<div class="screen" id="s8">
+  <div class="page-hdr"><h2>Search & filter</h2></div>
+  <div class="card">
+    <div class="search-bar"><i class="ti ti-search" aria-hidden="true"></i><span>Search by business name, TIN, owner…</span></div>
+    <div>
+      <span class="filter-chip"><i class="ti ti-map-pin" aria-hidden="true"></i> All barangays</span>
+      <span class="filter-chip"><i class="ti ti-category" aria-hidden="true"></i> LOB type</span>
+      <span class="filter-chip"><i class="ti ti-flag" aria-hidden="true"></i> Status</span>
+      <span class="filter-chip"><i class="ti ti-calendar" aria-hidden="true"></i> Date range</span>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">Showing 4 of 248 results</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Business name</th><th>Owner</th><th>Barangay</th><th>LOB</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:500">Santos Gen. Merchandise</td><td style="color:var(--color-text-secondary)">M. Santos</td><td style="color:var(--color-text-secondary)">Western Bicutan</td><td style="color:var(--color-text-secondary)">Retail</td><td><span class="badge badge-warn">Review</span></td></tr>
+          <tr><td style="font-weight:500">Dela Cruz Hardware</td><td style="color:var(--color-text-secondary)">J. Dela Cruz</td><td style="color:var(--color-text-secondary)">Ususan</td><td style="color:var(--color-text-secondary)">Retail</td><td><span class="badge badge-success">Approved</span></td></tr>
+          <tr><td style="font-weight:500">Reyes Food Cart</td><td style="color:var(--color-text-secondary)">B. Reyes</td><td style="color:var(--color-text-secondary)">Pinagsama</td><td style="color:var(--color-text-secondary)">Food</td><td><span class="badge badge-warn">Review</span></td></tr>
+          <tr><td style="font-weight:500">Garcia Auto Repair</td><td style="color:var(--color-text-secondary)">L. Garcia</td><td style="color:var(--color-text-secondary)">Fort Bonifacio</td><td style="color:var(--color-text-secondary)">Services</td><td><span class="badge badge-danger">Rejected</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 9: PERMIT PDF -->
+<div class="screen" id="s9">
+  <div class="page-hdr"><h2>Permit issuance</h2><span class="badge badge-success">Ready for release</span></div>
+  <div class="card">
+    <div class="section-label">Permit details</div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:13px">Permit no.</span><span style="font-size:13px;font-weight:500">BPP-2025-0189</span></div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:13px">Business name</span><span style="font-size:13px">Santos General Merchandise</span></div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:13px">Owner</span><span style="font-size:13px">Maria L. Santos</span></div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:13px">Validity</span><span style="font-size:13px">Jan 1 – Dec 31, 2025</span></div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:13px">Issued by</span><span style="font-size:13px">BPLO — Taguig City</span></div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:13px">OR number</span><span style="font-size:13px">OR-2025-88821</span></div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="section-label">PDF preview</div>
+    <div class="pdf-preview">
+      <i class="ti ti-file-description" style="font-size:32px;color:var(--color-text-tertiary)" aria-hidden="true"></i>
+      <span>BPP-2025-0189_Santos_Permit.pdf</span>
+      <span style="font-size:11px;color:var(--color-text-tertiary)">Generated · 2 pages · 148 KB</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn-primary" style="flex:1;text-align:center"><i class="ti ti-download" aria-hidden="true"></i> Download PDF</button>
+      <button class="btn-ghost" style="flex:1;text-align:center"><i class="ti ti-printer" aria-hidden="true"></i> Print</button>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="section-label">Send to applicant</div>
+    <div class="field-row"><label>Email</label><div class="fake-input">maria.santos@email.com</div></div>
+    <button class="btn-ghost" style="width:100%;text-align:center;margin-top:4px"><i class="ti ti-mail" aria-hidden="true"></i> Send via email</button>
+  </div>
+</div>
+
+<script>
+function show(i){
+  document.querySelectorAll('.screen').forEach((s,j)=>{s.classList.toggle('active',i===j)});
+  document.querySelectorAll('.nav button').forEach((b,j)=>{b.classList.toggle('active',i===j)});
+}
+</script>
